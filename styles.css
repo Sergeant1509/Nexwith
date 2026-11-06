@@ -468,3 +468,520 @@ a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid rgb
   .price-card:hover, .btn:hover, .nav-contact:hover { transform: none; }
   .service-item:hover { background: transparent; }
 }
+/* ==========================================================================
+   NEXWITH — ENHANCEMENT LAYER
+   Paste this at the very END of your existing CSS (after the last rule).
+   Same palette, fonts and layout; only adds depth, polish and finish.
+   No HTML changes needed.
+   ========================================================================== */
+
+:root{
+  --blue-glow:rgba(23,104,210,.28);
+  --gold-glow:rgba(242,183,44,.35);
+  --grad-blue:linear-gradient(135deg,#1768d2 0%,#3b8cf4 100%);
+  --grad-ink:linear-gradient(160deg,#17263f 0%,#111d32 55%,#0c1526 100%);
+  --shadow-lift:0 30px 70px rgba(17,29,50,.16);
+}
+
+/* ---------- Global finish ---------- */
+body{
+  background:
+    radial-gradient(900px 500px at 8% -5%,rgba(23,104,210,.06),transparent 60%),
+    radial-gradient(700px 500px at 100% 30%,rgba(242,183,44,.05),transparent 60%),
+    var(--paper);
+  background-attachment:fixed;
+}
+/* subtle paper grain */
+body:before{
+  content:"";position:fixed;inset:0;z-index:999;pointer-events:none;opacity:.035;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+::selection{background:var(--blue);color:#fff}
+::-webkit-scrollbar{width:10px}
+::-webkit-scrollbar-track{background:var(--paper)}
+::-webkit-scrollbar-thumb{background:#c3cfdf;border-radius:10px;border:2px solid var(--paper)}
+::-webkit-scrollbar-thumb:hover{background:var(--blue)}
+
+/* ---------- Offer ticker: richer red with shine ---------- */
+.offer-ticker{
+  background:linear-gradient(90deg,#9e2815,#c43a21 50%,#9e2815);
+  position:relative;
+}
+.offer-ticker:after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(100deg,transparent 35%,rgba(255,255,255,.14) 50%,transparent 65%);
+  background-size:250% 100%;animation:shine 6s linear infinite;
+}
+@keyframes shine{from{background-position:150% 0}to{background-position:-100% 0}}
+
+/* ---------- Header: refined glass ---------- */
+.header{
+  background:rgba(245,246,243,.72);
+  backdrop-filter:saturate(1.6) blur(20px);
+  -webkit-backdrop-filter:saturate(1.6) blur(20px);
+  box-shadow:0 1px 0 rgba(255,255,255,.7) inset,0 10px 30px rgba(17,29,50,.04);
+}
+.nav>a:not(.nav-contact){position:relative;padding:6px 0}
+.nav>a:not(.nav-contact):after{
+  content:"";position:absolute;left:0;bottom:-2px;height:2px;width:100%;
+  background:var(--grad-blue);border-radius:2px;
+  transform:scaleX(0);transform-origin:right;transition:transform .35s var(--ease);
+}
+.nav>a:not(.nav-contact):hover:after{transform:scaleX(1);transform-origin:left}
+.nav-contact{
+  background:var(--grad-ink);
+  box-shadow:0 8px 20px rgba(17,29,50,.18);
+  border-radius:8px;
+}
+.nav-contact:hover{background:var(--grad-blue);box-shadow:0 12px 28px var(--blue-glow)}
+
+/* ---------- Hero ---------- */
+.hero:before{
+  width:720px;height:720px;right:-260px;top:-300px;
+  background:radial-gradient(circle,rgba(23,104,210,.16),transparent 66%);
+  animation:orb 14s ease-in-out infinite alternate;
+}
+.hero:after{
+  content:"";position:absolute;left:-200px;bottom:-260px;width:520px;height:520px;border-radius:50%;
+  background:radial-gradient(circle,rgba(242,183,44,.14),transparent 65%);pointer-events:none;
+  animation:orb 18s ease-in-out infinite alternate-reverse;
+}
+@keyframes orb{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(-30px,24px,0) scale(1.08)}}
+
+.hero h1{letter-spacing:-.08em}
+.hero h1 em{
+  background:linear-gradient(100deg,#1768d2 10%,#3b8cf4 55%,#7db4ff 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  position:relative;
+}
+.hero h1 em:after{
+  content:"";position:absolute;left:0;right:0;bottom:.04em;height:.07em;border-radius:4px;
+  background:linear-gradient(90deg,var(--gold),transparent);
+  transform:scaleX(0);transform-origin:left;animation:underline 1.1s .6s var(--ease) forwards;
+}
+@keyframes underline{to{transform:scaleX(1)}}
+
+.overline{
+  display:inline-flex;padding:7px 13px 7px 11px;border:1px solid #dbe3ec;border-radius:40px;
+  background:rgba(255,255,255,.7);backdrop-filter:blur(8px);box-shadow:0 6px 16px rgba(17,29,50,.05);
+}
+.live-dot{animation:pulse 2s ease-out infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(44,168,121,.5)}100%{box-shadow:0 0 0 10px rgba(44,168,121,0)}}
+
+/* ---------- Buttons ---------- */
+.btn{border-radius:8px;position:relative;overflow:hidden}
+.btn-dark{background:var(--grad-ink)}
+.btn:not(.btn-quiet):before{
+  content:"";position:absolute;inset:0;transform:translateX(-120%) skewX(-18deg);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.28),transparent);
+  transition:transform .7s var(--ease);
+}
+.btn:not(.btn-quiet):hover:before{transform:translateX(120%) skewX(-18deg)}
+.btn-dark:hover{background:var(--grad-blue);box-shadow:0 14px 30px var(--blue-glow)}
+.btn span{transition:transform .3s var(--ease)}
+.btn:hover span{transform:translateX(4px)}
+.btn-light:hover{background:#f6c455;box-shadow:0 14px 30px var(--gold-glow)}
+
+/* ---------- Hero visual: glass + depth ---------- */
+.hero-visual{
+  border-radius:20px;border:1px solid rgba(255,255,255,.8);
+  background:linear-gradient(145deg,#eef3f9 0%,#dfe8f2 100%);
+  box-shadow:var(--shadow-lift),0 1px 0 #fff inset;
+}
+.hero-visual:after{
+  content:"";position:absolute;inset:0;z-index:-1;opacity:.5;
+  background-image:radial-gradient(rgba(17,29,50,.12) 1px,transparent 1.2px);
+  background-size:20px 20px;
+  -webkit-mask-image:radial-gradient(circle at 70% 30%,#000,transparent 70%);
+  mask-image:radial-gradient(circle at 70% 30%,#000,transparent 70%);
+}
+.browser-card{
+  border-radius:14px;
+  box-shadow:0 40px 80px rgba(17,29,50,.22),0 0 0 1px rgba(255,255,255,.6) inset;
+}
+.browser-brand .mini-mark{background:var(--grad-blue);box-shadow:0 6px 14px var(--blue-glow);border-radius:7px}
+.browser-actions span{background:var(--grad-ink)}
+.browser-tiles i{border-radius:7px;box-shadow:0 6px 12px rgba(17,29,50,.12)}
+.visual-note{
+  border-radius:12px;background:rgba(255,255,255,.78);
+  backdrop-filter:blur(16px) saturate(1.5);-webkit-backdrop-filter:blur(16px) saturate(1.5);
+  box-shadow:0 18px 40px rgba(17,29,50,.14);
+}
+.note-icon{border-radius:8px}
+
+.hero-bottom{background:rgba(255,255,255,.4);backdrop-filter:blur(6px)}
+.hero-bottom b{text-shadow:0 0 14px var(--gold-glow)}
+
+/* ---------- Light ticker: soft edge fade ---------- */
+.ticker-light{position:relative}
+.ticker-light:before,.ticker-light:after{
+  content:"";position:absolute;top:0;bottom:0;width:90px;z-index:2;pointer-events:none;
+}
+.ticker-light:before{left:0;background:linear-gradient(90deg,#fff,transparent)}
+.ticker-light:after{right:0;background:linear-gradient(270deg,#fff,transparent)}
+
+/* ---------- Section headings ---------- */
+.section-head h2,.faq-layout h2,.contact-copy h2{letter-spacing:-.07em}
+.section-head h2 span,.faq-layout h2 span,.contact-copy h2 span{
+  background:linear-gradient(100deg,#1768d2,#4a98f7);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+}
+.eyebrow{display:inline-flex;align-items:center;gap:10px}
+.eyebrow:before{content:"";width:22px;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--blue),var(--gold))}
+
+/* ---------- Services ---------- */
+.service-item{position:relative;border-radius:14px;border-bottom-color:transparent}
+.service-item:after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--line);
+}
+.service-item:before{
+  content:"";position:absolute;left:0;bottom:0;height:2px;width:100%;
+  background:linear-gradient(90deg,var(--blue),var(--gold));
+  transform:scaleX(0);transform-origin:left;transition:transform .6s var(--ease);z-index:1;
+}
+.service-item:hover{box-shadow:0 20px 50px rgba(17,29,50,.08)}
+.service-item:hover:before{transform:scaleX(1)}
+.service-no{transition:color .3s}
+.service-item:hover .service-no{color:var(--blue)}
+.service-icon{background:#fff;box-shadow:0 6px 14px rgba(17,29,50,.06)}
+.service-item:hover .service-icon{background:var(--grad-blue);box-shadow:0 10px 22px var(--blue-glow);border-color:transparent}
+.chips span{border-radius:20px;background:#fff;padding:5px 11px;transition:border-color .25s,color .25s,transform .25s}
+.service-item:hover .chips span{border-color:#c5d8f3;color:var(--blue)}
+
+/* ---------- Pricing ---------- */
+.pricing{
+  background:
+    radial-gradient(600px 300px at 90% 0%,rgba(23,104,210,.10),transparent 70%),
+    radial-gradient(500px 300px at 0% 100%,rgba(242,183,44,.10),transparent 70%),
+    #eaf0f6;
+}
+.price-card{
+  border-radius:18px;
+  background:linear-gradient(180deg,#fff 0%,#fbfcfe 100%);
+  box-shadow:0 14px 34px rgba(17,29,50,.06),0 1px 0 #fff inset;
+  overflow:hidden;
+}
+.price-card:before{
+  content:"";position:absolute;inset:0 0 auto 0;height:3px;
+  background:linear-gradient(90deg,var(--blue),var(--blue-2));opacity:0;transition:opacity .3s;
+}
+.price-card:hover:before{opacity:1}
+.price-card:hover{box-shadow:var(--shadow-lift);border-color:#bcd0ea}
+.price-featured{
+  background:var(--grad-ink);
+  box-shadow:0 30px 70px rgba(17,29,50,.34),0 0 0 1px rgba(255,255,255,.06) inset;
+}
+.price-featured:before{opacity:1;background:linear-gradient(90deg,var(--gold),#ffd36a,var(--gold))}
+.price-featured:after{
+  content:"";position:absolute;width:260px;height:260px;right:-90px;top:-110px;border-radius:50%;
+  background:radial-gradient(circle,rgba(59,140,244,.35),transparent 65%);pointer-events:none;
+}
+.price-featured:hover{border-color:var(--ink);box-shadow:0 40px 90px rgba(17,29,50,.42)}
+.featured-flag,.offer-tag{
+  border-radius:20px;padding:5px 10px;
+  background:linear-gradient(135deg,#ffe9ae,#fff4d2);box-shadow:0 4px 10px rgba(242,183,44,.25);
+}
+.price strong{
+  background:linear-gradient(180deg,#111d32,#2b4268);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+}
+.price-featured .price strong{
+  background:linear-gradient(180deg,#fff,#c8dcf8);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+}
+.price-card li:before{
+  content:"✓";top:1px;width:14px;height:14px;display:grid;place-items:center;border-radius:50%;
+  background:#fff3cf;color:#b57d00;font-size:8px;
+}
+.price-featured li:before{background:rgba(242,183,44,.18);color:#ffd36a}
+.pricing-foot{border-radius:12px;background:rgba(255,255,255,.7);backdrop-filter:blur(8px)}
+
+/* ---------- Approach steps ---------- */
+.steps{border-radius:4px}
+.steps article{position:relative;transition:background .3s}
+.steps article:hover{background:linear-gradient(180deg,#f6f9fe,transparent)}
+.steps article>span{
+  display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;
+  background:#e8f1ff;transition:background .3s,color .3s,transform .3s var(--ease);
+}
+.steps article:hover>span{background:var(--blue);color:#fff;transform:scale(1.1)}
+
+/* ---------- Closing band ---------- */
+.closing-band{
+  background:
+    radial-gradient(700px 400px at 85% 0%,rgba(59,140,244,.28),transparent 65%),
+    radial-gradient(500px 300px at 0% 100%,rgba(242,183,44,.12),transparent 65%),
+    var(--grad-ink);
+}
+.closing-band:after{animation:spin 60s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.closing-stamp{
+  background:rgba(255,255,255,.04);backdrop-filter:blur(6px);
+  box-shadow:0 0 40px rgba(242,183,44,.12) inset;
+}
+.closing-inner h2 span{
+  background:linear-gradient(100deg,#86b8ff,#c9e0ff);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+}
+
+/* ---------- FAQ ---------- */
+.faq-list details{transition:background .3s,padding .3s var(--ease);border-radius:10px}
+.faq-list details[open]{background:#fff;padding-inline:18px;box-shadow:0 14px 34px rgba(17,29,50,.06);border-bottom-color:transparent}
+.faq-list summary:hover{color:var(--blue)}
+.faq-list summary span{
+  width:28px;height:28px;display:grid;place-items:center;border-radius:50%;
+  border:1px solid #dce2e9;font-size:17px;flex:none;transition:transform .3s var(--ease),background .25s,color .25s;
+}
+.faq-list details[open] summary span{background:var(--blue);color:#fff;border-color:var(--blue)}
+
+/* ---------- Contact ---------- */
+.contact{
+  background:
+    radial-gradient(600px 400px at 100% 0%,rgba(23,104,210,.10),transparent 65%),
+    #eaf0f6;
+}
+.contact-links a{transition:padding .3s var(--ease),color .25s,background .25s;border-radius:6px}
+.contact-links a:hover{padding-inline:10px;color:var(--blue);background:rgba(255,255,255,.7)}
+.contact-links a b{transition:transform .25s}
+.contact-links a:hover b{transform:translate(3px,-3px)}
+.lead-form{
+  border-radius:20px;position:relative;
+  box-shadow:0 30px 70px rgba(17,29,50,.10),0 1px 0 #fff inset;
+}
+.lead-form:before{
+  content:"";position:absolute;inset:0 0 auto 0;height:4px;border-radius:20px 20px 0 0;
+  background:linear-gradient(90deg,var(--blue),var(--blue-2),var(--gold));
+}
+.lead-form input,.lead-form select,.lead-form textarea{border-radius:10px;transition:border .2s,box-shadow .2s,background .2s,transform .2s}
+.lead-form input:hover,.lead-form select:hover,.lead-form textarea:hover{background:#fff;border-color:#c9d4e2}
+.lead-form input:focus,.lead-form select:focus,.lead-form textarea:focus{
+  background:#fff;box-shadow:0 0 0 4px rgba(23,104,210,.12),0 8px 20px rgba(23,104,210,.08);
+}
+.submit-btn{border-radius:10px}
+
+/* ---------- Footer ---------- */
+.footer{
+  background:
+    radial-gradient(600px 200px at 50% 0%,rgba(23,104,210,.18),transparent 70%),
+    #0d1728;
+  position:relative;
+}
+.footer:before{
+  content:"";position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--blue),var(--gold),var(--blue),transparent);
+}
+.footer-logo{border-radius:8px;box-shadow:0 8px 20px rgba(0,0,0,.25)}
+.back-top{transition:transform .3s var(--ease),color .2s}
+.back-top:hover{transform:translateY(-3px)}
+
+/* ---------- Reveal: smoother ---------- */
+.reveal{transform:translate3d(0,30px,0) scale(.985);filter:blur(4px);
+  transition:opacity .9s var(--ease),transform .9s var(--ease),filter .9s var(--ease)}
+.reveal.is-visible{transform:translate3d(0,0,0) scale(1);filter:blur(0)}
+
+/* ---------- Mobile CTA ---------- */
+@media(max-width:760px){
+  .mobile-contact{background:var(--grad-blue);border-radius:12px;box-shadow:0 14px 34px var(--blue-glow)}
+  .hero-visual{border-radius:16px}
+  .service-item:before,.service-item:after{display:none}
+  .reveal{filter:none}
+  body{background-attachment:scroll}
+}
+
+/* ---------- Touch + reduced motion safety ---------- */
+@media (hover:none) and (pointer:coarse){
+  .btn:not(.btn-quiet):before{display:none}
+  .contact-links a:hover{padding-inline:0;background:transparent}
+}
+@media(prefers-reduced-motion:reduce){
+  .hero:before,.hero:after,.offer-ticker:after,.closing-band:after,.live-dot{animation:none!important}
+  .hero h1 em:after{transform:scaleX(1);animation:none}
+  .reveal{filter:none}
+}
+/* ==========================================================================
+   NEXWITH — ENHANCEMENT LAYER v2
+   Paste AFTER the first enhancement layer (very end of the CSS file).
+   Pure CSS, no HTML/JS changes. Newer effects are progressive: browsers
+   that don't support them simply skip them.
+   ========================================================================== */
+
+@property --angle{syntax:"<angle>";initial-value:0deg;inherits:false}
+
+:root{
+  --glass:rgba(255,255,255,.62);
+  --glass-line:rgba(255,255,255,.85);
+  --ring:0 0 0 1px rgba(17,29,50,.06);
+}
+
+/* ---------- Scroll progress bar (no JS) ---------- */
+@supports (animation-timeline:scroll()){
+  html:before{
+    content:"";position:fixed;top:0;left:0;right:0;height:3px;z-index:300;
+    background:linear-gradient(90deg,var(--blue),var(--blue-2),var(--gold));
+    transform-origin:left;transform:scaleX(0);
+    animation:progress linear both;animation-timeline:scroll(root);
+    box-shadow:0 0 12px var(--blue-glow);
+  }
+  @keyframes progress{to{transform:scaleX(1)}}
+
+  /* header tightens as you scroll */
+  .header{animation:headerShrink linear both;animation-timeline:scroll(root);animation-range:0 160px}
+  @keyframes headerShrink{
+    to{height:68px;background:rgba(245,246,243,.9);box-shadow:0 12px 34px rgba(17,29,50,.08)}
+  }
+
+  /* elements glide in as they enter the viewport */
+  .service-item,.steps article,.faq-list details,.pricing-block{
+    animation:enter linear both;animation-timeline:view();animation-range:entry 0% entry 55%;
+  }
+  @keyframes enter{from{opacity:0;transform:translate3d(0,34px,0)}to{opacity:1;transform:none}}
+
+  /* hero visual drifts slightly slower than the page = depth */
+  .hero-visual{animation:parallax linear both;animation-timeline:view();animation-range:exit 0% exit 100%}
+  @keyframes parallax{to{transform:translate3d(0,-36px,0)}}
+}
+
+/* ---------- Hero: staggered load-in ---------- */
+.hero .overline,.hero h1,.hero-description,.hero-actions,.hero-proof{
+  animation:rise .9s var(--ease) both;
+}
+.hero h1{animation-delay:.08s}
+.hero-description{animation-delay:.2s}
+.hero-actions{animation-delay:.32s}
+.hero-proof{animation-delay:.44s}
+.hero-visual{animation:visualIn 1.2s .15s var(--ease) both}
+@keyframes rise{from{opacity:0;transform:translate3d(0,26px,0)}to{opacity:1;transform:none}}
+@keyframes visualIn{from{opacity:0;transform:translate3d(0,40px,0) scale(.96)}to{opacity:1;transform:none}}
+
+/* gradient headline shimmer */
+.hero h1 em{background-size:220% 100%;animation:sheen 7s ease-in-out infinite alternate}
+@keyframes sheen{from{background-position:0 0}to{background-position:100% 0}}
+
+.hero-proof{
+  padding:9px 15px;border-radius:40px;width:fit-content;
+  background:var(--glass);border:1px solid var(--glass-line);backdrop-filter:blur(10px);
+  box-shadow:0 8px 20px rgba(17,29,50,.05);
+}
+.proof-line{background:linear-gradient(90deg,var(--gold),transparent)}
+
+/* ---------- Hero visual: extra life ---------- */
+.hero-visual{
+  background:
+    conic-gradient(from 210deg at 85% 90%,rgba(23,104,210,.14),transparent 30%),
+    linear-gradient(145deg,#eef3f9 0%,#dde7f2 100%);
+}
+.visual-top{padding-bottom:10px;border-bottom:1px dashed rgba(17,29,50,.1)}
+.browser-copy{background:linear-gradient(90deg,#dfe5ec 0%,#eef2f6 50%,#dfe5ec 100%);background-size:200% 100%;animation:skeleton 2.8s linear infinite}
+@keyframes skeleton{to{background-position:-200% 0}}
+.browser-actions i{box-shadow:0 0 0 0 rgba(23,131,92,.35);animation:ping 2.4s ease-out infinite}
+@keyframes ping{70%,100%{box-shadow:0 0 0 9px rgba(23,131,92,0)}}
+.note-icon{box-shadow:0 6px 14px rgba(23,104,210,.18)}
+.note-gold{box-shadow:0 6px 14px rgba(242,183,44,.28)}
+
+/* ---------- Featured price card: rotating gradient border ---------- */
+.price-featured{isolation:isolate}
+.price-featured>.price-card-top,.price-featured>*{position:relative;z-index:1}
+@supports (background:conic-gradient(from var(--angle),red,blue)){
+  .price-featured{
+    border:1px solid transparent;
+    background:
+      linear-gradient(#111d32,#0c1526) padding-box,
+      conic-gradient(from var(--angle),#1768d2,#f2b72c,#3b8cf4,#1768d2) border-box;
+    animation:borderSpin 6s linear infinite;
+  }
+  @keyframes borderSpin{to{--angle:360deg}}
+}
+
+/* ---------- Price cards: spotlight + lift ---------- */
+.price-card{transition:transform .45s var(--ease),box-shadow .45s,border-color .3s}
+.price-card:hover{transform:translateY(-8px)}
+.plan-symbol{
+  display:grid;place-items:center;width:34px;height:34px;border-radius:10px;
+  background:#e9f1fd;transition:transform .4s var(--ease),background .3s,color .3s;
+}
+.price-card:hover .plan-symbol{transform:rotate(12deg) scale(1.1);background:var(--blue);color:#fff}
+.price-featured .plan-symbol{background:rgba(255,255,255,.1);color:#ffd36a}
+.price-featured:hover .plan-symbol{background:var(--gold);color:var(--ink)}
+.price del{position:relative;text-decoration:none}
+.price del:after{content:"";position:absolute;left:-2px;right:-2px;top:52%;height:1.5px;background:var(--red);transform:rotate(-6deg);opacity:.7}
+.price-link{transition:color .25s,padding .3s var(--ease)}
+.price-link:hover{padding-inline:6px}
+
+/* ---------- Pricing labels / section dividers ---------- */
+.pricing-label{padding-bottom:14px;border-bottom:1px solid rgba(17,29,50,.08);position:relative}
+.pricing-label:after{content:"";position:absolute;left:0;bottom:-1px;width:64px;height:2px;background:linear-gradient(90deg,var(--blue),var(--gold))}
+.section-intro{position:relative;padding-left:16px;border-left:2px solid var(--gold)}
+
+/* ---------- Services: richer rows ---------- */
+.service-item{background:linear-gradient(90deg,transparent,transparent)}
+.service-item:hover{background:linear-gradient(100deg,#fff 0%,#f4f8fe 100%)}
+.service-body h3{transition:transform .4s var(--ease),color .3s}
+.service-item:hover .service-body h3{transform:translateX(6px);color:var(--blue)}
+.service-no{font-size:12px;position:relative}
+.service-no:after{content:"";display:block;width:14px;height:2px;margin-top:6px;background:var(--gold);transform:scaleX(.4);transform-origin:left;transition:transform .4s var(--ease)}
+.service-item:hover .service-no:after{transform:scaleX(1.6)}
+
+/* ---------- Steps: connecting line ---------- */
+.steps article:not(:last-child):after{
+  content:"";position:absolute;top:40px;right:-1px;width:1px;height:0;
+  background:linear-gradient(var(--blue),transparent);transition:height .5s var(--ease);
+}
+.steps article:hover:after{height:60px}
+.steps h3{transition:color .3s}
+.steps article:hover h3{color:var(--blue)}
+
+/* ---------- Closing band: soft pulse on stamp ---------- */
+.closing-stamp{animation:stampFloat 6s ease-in-out infinite}
+@keyframes stampFloat{0%,100%{transform:translateY(-50%) rotate(-4deg)}50%{transform:translateY(calc(-50% - 8px)) rotate(4deg)}}
+.closing-inner .btn-light{box-shadow:0 14px 36px rgba(0,0,0,.25)}
+
+/* ---------- FAQ: smoother open ---------- */
+.faq-list details p{animation:faqOpen .45s var(--ease)}
+@keyframes faqOpen{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.faq-list summary{transition:padding .3s var(--ease)}
+.faq-list details:not([open]):hover summary{padding-left:8px}
+
+/* ---------- Form polish ---------- */
+.lead-form label{transition:color .2s}
+.lead-form label:has(+input:focus),.lead-form label:has(+select:focus),.lead-form label:has(+textarea:focus){color:var(--blue)}
+.lead-form select{appearance:none;-webkit-appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%231768d2' stroke-width='2'><path d='M1 1.5l5 5 5-5'/></svg>");
+  background-repeat:no-repeat;background-position:right 14px center;padding-right:38px}
+.lead-form input:not(:placeholder-shown):valid{border-color:#9bd6bd}
+.lead-form input:not(:placeholder-shown):invalid{border-color:#e6a89c}
+.submit-btn{background:var(--grad-blue);box-shadow:0 14px 30px var(--blue-glow)}
+.submit-btn:hover{box-shadow:0 18px 40px rgba(23,104,210,.42)}
+.submit-btn:active{transform:translateY(0) scale(.99)}
+
+/* ---------- Micro-interactions ---------- */
+.btn:active{transform:translateY(-1px) scale(.985)}
+.logo img{transition:transform .4s var(--ease),filter .3s}
+.logo:hover img{transform:scale(1.03)}
+.footer-bottom a{position:relative}
+.footer-bottom a:after{content:"";position:absolute;left:0;bottom:-3px;height:1px;width:100%;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease)}
+.footer-bottom a:hover:after{transform:scaleX(1)}
+.menu-toggle{border-radius:10px;background:rgba(255,255,255,.7);transition:background .25s,box-shadow .25s}
+.menu-toggle:hover{box-shadow:0 8px 18px rgba(17,29,50,.1)}
+a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible{outline:2px solid var(--blue);outline-offset:4px;border-radius:6px}
+
+/* ---------- Mobile tuning ---------- */
+@media(max-width:760px){
+  .section-intro{padding-left:12px}
+  .hero-proof{padding:8px 12px}
+  .price-card:hover{transform:none}
+  .service-item:hover .service-body h3{transform:none}
+  .closing-stamp{animation:none;transform:none}
+  .steps article:after{display:none}
+  .hero-visual{animation:visualIn 1s .1s var(--ease) both}
+}
+@media(max-width:480px){
+  .closing-stamp{animation:none}
+}
+
+/* ---------- Reduced motion ---------- */
+@media(prefers-reduced-motion:reduce){
+  html:before{display:none}
+  .hero .overline,.hero h1,.hero-description,.hero-actions,.hero-proof,.hero-visual,
+  .service-item,.steps article,.faq-list details,.pricing-block,.header{animation:none!important}
+  .price-featured,.closing-stamp,.browser-copy,.browser-actions i,.hero h1 em{animation:none!important}
+}
