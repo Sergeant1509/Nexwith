@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 420" role="img" aria-labelledby="title">
+  <title id="title">Nexwith symbol</title>
+  <defs>
+    <linearGradient id="mainBlue" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#0739B8"/>
+      <stop offset="0.48" stop-color="#064BD8"/>
+      <stop offset="1" stop-color="#0757D9"/>
+    </linearGradient>
+    <linearGradient id="cyan" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#078BEF"/>
+      <stop offset="1" stop-color="#10A9F5"/>
+    </linearGradient>
+  </defs>
+  <path d="M82 359 L151 184 Q158 166 176 166 L220 166 Q233 166 243 177 L315 253 Q326 265 317 279 L299 305 Q289 319 273 308 L216 244 L174 347 Q169 360 153 360 Z" fill="url(#mainBlue)"/>
+  <path d="M296 133 L329 58 Q334 45 348 45 L405 45 Q416 45 411 57 L371 153 L354 187 Q349 198 340 187 L294 145 Q289 140 296 133 Z" fill="url(#cyan)"/>
+</svg>
