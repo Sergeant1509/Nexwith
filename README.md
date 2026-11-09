@@ -26,3 +26,5 @@ Open `index.html` in a browser or deploy the folder to any static web host.
 
 ## Form limitation
 The enquiry form opens the visitor's default email app. It does not store or transmit leads to a server. For reliable lead capture, connect a backend or form service before launch.
+
+Author - Abhijeet Gautam & Paarijaat Awasthi
