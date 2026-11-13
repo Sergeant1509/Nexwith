@@ -118,12 +118,13 @@
           <div class="form-heading"><span>WORK WITH US / APPLICATION</span><span class="form-required">* REQUIRED</span></div>
           <label for="app-name">Your full name</label><input id="app-name" name="name" autocomplete="name" placeholder="Full name" required>
           <div class="form-row"><div><label for="app-email">Email address</label><input id="app-email" name="email" type="email" autocomplete="email" placeholder="name@example.com" required></div><div><label for="app-phone">Phone / WhatsApp</label><input id="app-phone" name="phone" type="tel" autocomplete="tel" placeholder="+91..." required></div></div>
-          <div class="form-row"><div><label for="app-city">City</label><input id="app-city" name="city" placeholder="Your city" required></div><div><label for="app-role">Opportunity</label><select id="app-role" name="role" required><option value="" disabled selected>Choose an opportunity</option><option>City Growth Associate</option></select></div></div>
+          <div class="form-row"><div><label for="app-city">City</label><input id="app-city" name="city" placeholder="Your city" required></div><div><label for="app-education">Education</label><input id="app-education" name="education" placeholder="Course, college or qualification" required></div></div>
+          <label for="app-role">Opportunity</label><select id="app-role" name="role" required><option value="" disabled selected>Choose an opportunity</option><option>City Growth Associate</option></select>
           <label for="app-availability">Availability</label><select id="app-availability" name="availability" required><option value="" disabled selected>Select your availability</option><option>Part-time / alongside studies</option><option>Flexible hours</option><option>Full-time</option><option>Project-based</option></select>
           <label for="app-about">A little about you</label><textarea id="app-about" name="about" rows="4" placeholder="Relevant experience, strengths, interests, or why you'd like to work with Nexwith." required></textarea>
           <label for="app-links">Portfolio / LinkedIn (optional)</label><input id="app-links" name="links" type="url" placeholder="https://">
-          <button class="btn btn-dark submit-btn" type="submit">Prepare application <span>↗</span></button>
-          <p class="form-note" id="application-note">Your email app will open with the application prepared. No application data is stored on this website.</p>
+          <button class="btn btn-dark submit-btn" type="submit">Submit application <span>↗</span></button>
+          <p class="form-note" id="application-note" role="status" aria-live="polite">Your application will be securely submitted to Nexwith.</p>
         </form>
       </div>
     </section>
