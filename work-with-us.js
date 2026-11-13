@@ -24,6 +24,39 @@ const role = document.querySelector("#app-role");
 const note = document.querySelector("#application-note");
 const submitButton = form?.querySelector('button[type="submit"]');
 
+function showSuccessPopup(applicantName) {
+  let dialog = document.querySelector("#application-success-dialog");
+
+  if (!dialog) {
+    dialog = document.createElement("dialog");
+    dialog.id = "application-success-dialog";
+    dialog.className = "application-success-dialog";
+    dialog.setAttribute("aria-labelledby", "application-success-title");
+    dialog.innerHTML = `
+      <div class="success-popup-content">
+        <div class="success-popup-icon" aria-hidden="true">✓</div>
+        <p class="success-popup-eyebrow">NEXWITH / APPLICATION RECEIVED</p>
+        <h2 id="application-success-title">You're on your way.</h2>
+        <p class="success-popup-message"></p>
+        <p class="success-popup-detail">Our founding team will review your application. If there's a fit, we'll contact you using the details you provided.</p>
+        <button class="btn btn-dark success-popup-close" type="button">Done <span>↗</span></button>
+      </div>
+    `;
+    document.body.appendChild(dialog);
+
+    dialog.querySelector(".success-popup-close").addEventListener("click", () => dialog.close());
+    dialog.addEventListener("click", event => {
+      if (event.target === dialog) dialog.close();
+    });
+  }
+
+  dialog.querySelector(".success-popup-message").textContent =
+    applicantName ? `Thanks, ${applicantName}. Your application has been submitted successfully.`
+      : "Your application has been submitted successfully.";
+
+  if (!dialog.open) dialog.showModal();
+}
+
 document.querySelectorAll("[data-role]").forEach(link => {
   link.addEventListener("click", () => {
     if (role) role.value = link.dataset.role;
