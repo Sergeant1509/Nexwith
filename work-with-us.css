@@ -118,3 +118,65 @@
  .ww-hero .hero-proof{align-items:flex-start}
 }
 @media(prefers-reduced-motion:reduce){.opportunity-card,.art-card,.opp-link span{transition:none!important}.opportunity-card:hover{transform:none}}
+
+
+/* Application success confirmation */
+.application-success-dialog {
+  width: min(92vw, 470px);
+  max-width: 470px;
+  padding: 0;
+  border: 1px solid rgba(17,29,50,.12);
+  border-radius: 18px;
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 30px 100px rgba(9,24,45,.28);
+}
+.application-success-dialog::backdrop {
+  background: rgba(10,20,36,.62);
+  backdrop-filter: blur(5px);
+}
+.success-popup-content {
+  padding: 42px 38px 36px;
+  text-align: center;
+}
+.success-popup-icon {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  margin: 0 auto 22px;
+  border-radius: 50%;
+  background: #eaf5ee;
+  color: #21834b;
+  font: 700 29px/1 var(--font-head);
+}
+.success-popup-eyebrow {
+  margin: 0 0 12px;
+  color: var(--blue);
+  font: 700 9px var(--font-head);
+  letter-spacing: .15em;
+}
+.success-popup-content h2 {
+  margin: 0 0 13px;
+  font: 700 clamp(30px,6vw,38px)/1.08 var(--font-head);
+  letter-spacing: -.055em;
+}
+.success-popup-message {
+  margin: 0 auto 10px;
+  color: #334155;
+  font: 600 14px/1.65 var(--font-head);
+}
+.success-popup-detail {
+  margin: 0 auto 25px;
+  max-width: 340px;
+  color: #718096;
+  font-size: 12px;
+  line-height: 1.75;
+}
+.success-popup-close {
+  min-width: 145px;
+  justify-content: center;
+}
+@media(max-width:480px) {
+  .success-popup-content { padding: 34px 24px 28px; }
+}
