@@ -89,8 +89,10 @@ form?.addEventListener("submit", async event => {
 
   try {
     await addDoc(collection(db, "applications"), application);
+    const applicantName = application.name;
     form.reset();
     if (note) note.textContent = "Application submitted successfully. The Nexwith team will review your details.";
+    showSuccessPopup(applicantName);
   } catch (error) {
     console.error("Nexwith application submission failed:", error);
     if (note) {
