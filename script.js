@@ -85,7 +85,7 @@
     );
     const note = $('#form-note');
     if (note) note.textContent = 'Opening your email application with the enquiry details…';
-    window.location.href = `mailto:abhijeet.gautam1509@gmail.com?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:nexwith@yahoo.com?subject=${subject}&body=${body}`;
   });
 
   // Show the mobile contact bar after the hero has moved out of view.
