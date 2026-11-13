@@ -180,3 +180,16 @@
 @media(max-width:480px) {
   .success-popup-content { padding: 34px 24px 28px; }
 }
+
+
+/* Application issue dialogs */
+.application-issue-dialog .issue-popup-icon {
+  background: #fff3e7;
+  color: #b66a20;
+}
+.application-issue-dialog .issue-popup-eyebrow {
+  color: #b66a20;
+}
+.application-issue-dialog .issue-popup-detail {
+  margin-bottom: 25px;
+}
