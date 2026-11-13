@@ -1,8 +1,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 import {
   getFirestore,
-  collection,
-  addDoc,
+  doc,
+  setDoc,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
@@ -88,7 +88,9 @@ form?.addEventListener("submit", async event => {
   if (note) note.textContent = "Submitting your application securely…";
 
   try {
-    await addDoc(collection(db, "applications"), application);
+    // One application per email address: the normalized email is the document ID.
+    // Firestore rules must allow create only when the ID matches the submitted email.
+    await setDoc(doc(db, "applications", application.email), application);
     const applicantName = application.name;
     form.reset();
     if (note) note.textContent = "Application submitted successfully. The Nexwith team will review your details.";
@@ -97,7 +99,7 @@ form?.addEventListener("submit", async event => {
     console.error("Nexwith application submission failed:", error);
     if (note) {
       note.textContent = error?.code === "permission-denied"
-        ? "Submission was blocked by Firestore security rules. Please contact Nexwith directly."
+        ? "An application may already exist for this email address, or Firestore rules need updating. If you have not applied before, contact Nexwith."
         : "We couldn't submit your application. Please try again or email abhijeet.gautam1509@gmail.com.";
     }
   } finally {
