@@ -57,6 +57,41 @@ function showSuccessPopup(applicantName) {
   if (!dialog.open) dialog.showModal();
 }
 
+
+function showIssuePopup({ title, eyebrow, message, detail, icon = "!" }) {
+  let dialog = document.querySelector("#application-issue-dialog");
+
+  if (!dialog) {
+    dialog = document.createElement("dialog");
+    dialog.id = "application-issue-dialog";
+    dialog.className = "application-success-dialog application-issue-dialog";
+    dialog.setAttribute("aria-labelledby", "application-issue-title");
+    dialog.innerHTML = `
+      <div class="success-popup-content">
+        <div class="success-popup-icon issue-popup-icon" aria-hidden="true"></div>
+        <p class="success-popup-eyebrow issue-popup-eyebrow"></p>
+        <h2 id="application-issue-title"></h2>
+        <p class="success-popup-message issue-popup-message"></p>
+        <p class="success-popup-detail issue-popup-detail"></p>
+        <button class="btn btn-dark success-popup-close" type="button">Got it <span>↗</span></button>
+      </div>
+    `;
+    document.body.appendChild(dialog);
+    dialog.querySelector(".success-popup-close").addEventListener("click", () => dialog.close());
+    dialog.addEventListener("click", event => {
+      if (event.target === dialog) dialog.close();
+    });
+  }
+
+  dialog.querySelector(".issue-popup-icon").textContent = icon;
+  dialog.querySelector(".issue-popup-eyebrow").textContent = eyebrow;
+  dialog.querySelector("#application-issue-title").textContent = title;
+  dialog.querySelector(".issue-popup-message").textContent = message;
+  dialog.querySelector(".issue-popup-detail").textContent = detail;
+
+  if (!dialog.open) dialog.showModal();
+}
+
 document.querySelectorAll("[data-role]").forEach(link => {
   link.addEventListener("click", () => {
     if (role) role.value = link.dataset.role;
@@ -97,10 +132,24 @@ form?.addEventListener("submit", async event => {
     showSuccessPopup(applicantName);
   } catch (error) {
     console.error("Nexwith application submission failed:", error);
-    if (note) {
-      note.textContent = error?.code === "permission-denied"
-        ? "An application may already exist for this email address, or Firestore rules need updating. If you have not applied before, contact Nexwith."
-        : "We couldn't submit your application. Please try again or email abhijeet.gautam1509@gmail.com.";
+    if (note) note.textContent = "";
+
+    if (error?.code === "permission-denied") {
+      showIssuePopup({
+        eyebrow: "NEXWITH / APPLICATION CHECK",
+        title: "Already made your move?",
+        message: "This email may already be on our list.",
+        detail: "We keep applications to one per email address. If this is your first attempt, check your details and try again shortly, or reach out to our team.",
+        icon: "↗"
+      });
+    } else {
+      showIssuePopup({
+        eyebrow: "NEXWITH / QUICK PAUSE",
+        title: "That didn't go through.",
+        message: "Your application hasn't been submitted yet.",
+        detail: "Please try again in a moment. If the issue continues, contact us at abhijeet.gautam1509@gmail.com.",
+        icon: "!"
+      });
     }
   } finally {
     if (submitButton) {
