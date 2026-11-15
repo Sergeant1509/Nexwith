@@ -78,6 +78,12 @@
 .apply-form{width:100%}
 .apply-form .form-row>div{min-width:0}
 .apply-form input,.apply-form select,.apply-form textarea{width:100%;min-width:0}
+.resume-link-field{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:stretch}
+.resume-drive-btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:0 15px;border:1px solid #cbd5e1;border-radius:7px;background:#fff;color:var(--ink);font:600 11px var(--font-head);white-space:nowrap;transition:background .2s,border-color .2s}
+.resume-drive-btn:hover{background:#f3f7fc;border-color:var(--blue)}
+.resume-drive-btn span{color:var(--blue);font-size:15px}
+.resume-help{margin:-8px 0 17px;color:#788496;font-size:10px;line-height:1.65}
+@media(max-width:480px){.resume-link-field{grid-template-columns:1fr}.resume-drive-btn{min-height:44px}}
 .ww-bottom{position:relative;overflow:hidden;background:#101d32;color:#fff;padding:95px 0}
 .ww-bottom:after{content:"N";position:absolute;right:5%;top:-125px;font:700 450px/.9 var(--font-head);color:rgba(255,255,255,.035);pointer-events:none}
 .ww-bottom .shell{position:relative;z-index:1}
