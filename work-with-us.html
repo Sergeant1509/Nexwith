@@ -166,10 +166,11 @@
           <label for="app-about">A little about you</label><textarea id="app-about" name="about" rows="4" placeholder="Relevant experience, strengths, interests, or why you'd like to work with Nexwith." required></textarea>
           <label for="app-resume">Resume Google Drive link (optional)</label>
           <div class="resume-link-field">
-            <input id="app-resume" name="resumeLink" type="url" inputmode="url" placeholder="Paste your Google Drive share link">
-            <a class="resume-drive-btn" href="https://drive.google.com/drive/my-drive" target="_blank" rel="noopener noreferrer">Add resume via Google Drive <span>↗</span></a>
+            <input id="app-resume" name="resumeLink" type="url" inputmode="url" placeholder="Your selected resume link will appear here" readonly>
+            <button class="resume-drive-btn" id="choose-resume-btn" type="button" disabled>Loading Google Drive… <span>↗</span></button>
           </div>
-          <p class="resume-help">Upload your resume to Google Drive, set access to “Anyone with the link — Viewer”, then paste the share link above.</p>
+          <p class="resume-selection-status" id="resume-selection-status" role="status" aria-live="polite">Choose a PDF or Word document from your Google Drive.</p>
+          <p class="resume-help">After selecting, make sure the file's General access is set to “Anyone with the link — Viewer” so the Nexwith team can open it.</p>
           <label for="app-links">Portfolio / LinkedIn (optional)</label><input id="app-links" name="links" type="url" placeholder="https://">
           <button class="btn btn-dark submit-btn" type="submit">Submit application <span>↗</span></button>
           <p class="form-note" id="application-note" role="status" aria-live="polite">Your application will be securely submitted to Nexwith.</p>
