@@ -246,3 +246,20 @@
   margin-bottom:0;
   position:relative;
 }
+
+
+/* Google Drive Picker resume control */
+.apply-form .resume-link-field{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:stretch}
+.apply-form .resume-link-field input[readonly]{cursor:default}
+.apply-form .resume-drive-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  min-height:45px;padding:0 15px;border:1px solid #cbd5e1;border-radius:10px;
+  background:#fff;color:var(--ink);font:600 11px var(--font-head);white-space:nowrap;
+  cursor:pointer;transition:background .2s,border-color .2s,opacity .2s;
+}
+.apply-form .resume-drive-btn:hover:not(:disabled){background:#f3f7fc;border-color:var(--blue)}
+.apply-form .resume-drive-btn span{color:var(--blue);font-size:15px}
+.apply-form .resume-drive-btn:disabled{cursor:wait;opacity:.65}
+.apply-form .resume-selection-status{margin:9px 0 5px;color:#64748b;font-size:10px;line-height:1.65}
+.apply-form .resume-selection-status.is-error{color:#b45309}
+@media(max-width:480px){.apply-form .resume-link-field{grid-template-columns:minmax(0,1fr)}.apply-form .resume-drive-btn{min-height:45px}}
