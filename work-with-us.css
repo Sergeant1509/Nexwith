@@ -217,3 +217,17 @@
 @media(max-width:760px) {
   .ww-faq-grid { grid-template-columns: 1fr; gap: 28px; }
 }
+
+/* Keep the application status note clear of the submit button and its shadow */
+.apply-form .submit-btn{
+  display:flex;
+  margin-bottom:8px;
+}
+.apply-form .form-note{
+  display:block;
+  position:relative;
+  clear:both;
+  margin:22px 0 0;
+  padding:0 0 4px;
+  line-height:1.75;
+}
