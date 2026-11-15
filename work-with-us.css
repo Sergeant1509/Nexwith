@@ -231,3 +231,18 @@
   padding:0 0 4px;
   line-height:1.75;
 }
+
+/* Resume helper copy must sit below the entire Drive input/button row */
+.work-page .apply-form .resume-help{
+  display:block;
+  position:static;
+  clear:both;
+  margin:12px 0 22px !important;
+  padding:0;
+  line-height:1.7;
+  width:100%;
+}
+.work-page .apply-form .resume-link-field{
+  margin-bottom:0;
+  position:relative;
+}
