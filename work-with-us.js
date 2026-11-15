@@ -112,6 +112,7 @@ form?.addEventListener("submit", async event => {
     role: values.role,
     availability: values.availability,
     about: values.about.trim(),
+    resumeLink: values.resumeLink.trim(),
     links: values.links.trim(),
     createdAt: serverTimestamp()
   };
