@@ -999,32 +999,3 @@ html{scroll-padding-top:106px}
 .price-link [data-lucide],.opp-link [data-lucide],.nav-contact [data-lucide],.btn [data-lucide],.mobile-contact [data-lucide],.resume-drive-btn [data-lucide]{width:15px;height:15px}
 .contact-links a b [data-lucide],.contact-links a b svg{width:15px;height:15px}
 .menu-toggle [data-lucide]{width:20px;height:20px}
-
-
-/* Performance pass: keep the visual system, reduce expensive paint and motion work. */
-html{scroll-behavior:auto}
-.header,.nav,.visual-note,.browser-card,.closing-stamp,.closing-band:after,.hero:before,.hero:after,.offer-ticker:after{
-  -webkit-backdrop-filter:none;
-  backdrop-filter:none;
-}
-.header{background:rgba(245,246,243,.97)}
-.visual-note{background:rgba(255,255,255,.97)}
-.browser-card{animation:none}
-.visual-note{animation:none}
-.closing-stamp{animation:none}
-.closing-band:after{animation:none}
-.live-dot{animation:none}
-.ticker-track{animation-duration:48s}
-.reveal{filter:none!important;transform:translate3d(0,12px,0);transition:opacity .38s ease,transform .38s ease}
-.reveal.is-visible{filter:none!important;transform:none}
-.price-card,.service-item,.btn,.nav-contact,.logo img{transition-duration:.18s}
-.hero-visual{animation:none}
-.hero h1 em{animation:none}
-.browser-copy{animation:none;background:#e8edf3}
-.browser-actions i{animation:none;box-shadow:none}
-@media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}
-}
-@media(max-width:720px){
-  .ticker-track{animation-duration:60s}
-}
