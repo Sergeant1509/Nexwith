@@ -31,3 +31,6 @@ body{background:var(--paper);color:var(--ink);font-family:var(--font-body);-webk
 .status{border-radius:3px;font-family:var(--font-head)}
 @media(max-width:720px){.admin-shell{grid-template-columns:1fr}.sidebar{min-height:auto;height:auto;position:relative;padding:12px 17px;flex-direction:row;align-items:center;justify-content:space-between}.brand{min-height:42px;gap:8px}.brand img{width:125px;max-height:40px}.brand-caption{font-size:7px}.side-label,.side-link{display:none}.sidebar-bottom{margin:0;padding:0;border:0;font-size:9px}.sidebar-bottom .live-dot{display:block}.signout-btn{margin-left:5px}.main{padding:25px 16px}}
 @media(max-width:480px){.brand img{width:110px}.brand-divider{height:24px}.brand-caption{font-size:6px}.sidebar-bottom{font-size:8px;gap:6px}}
+
+/* Ensure authenticated view switching respects the HTML hidden attribute. */
+[hidden]{display:none!important}
