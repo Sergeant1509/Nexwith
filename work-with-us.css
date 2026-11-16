@@ -265,11 +265,3 @@ html{scroll-padding-top:106px}
 
 .art-card-icon [data-lucide],.art-card-icon svg,.opp-icon [data-lucide],.opp-icon svg{width:18px;height:18px}
 .resume-drive-btn [data-lucide]{width:14px;height:14px}
-
-
-/* Recruitment page performance: avoid expensive decorative paint on mobile and scroll. */
-.art-card,.opportunity-card,.ww-bottom:before,.ww-bottom:after{backdrop-filter:none;-webkit-backdrop-filter:none}
-.art-card-icon,.opp-icon{transition:background-color .18s,color .18s}
-@media(prefers-reduced-motion:reduce){
- *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
-}
