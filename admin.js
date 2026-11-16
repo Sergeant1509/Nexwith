@@ -85,3 +85,26 @@ onAuthStateChanged(auth,user=>{
   showLogin(user?"This Google account is not authorized for Nexwith administration.":"");
  }
 });
+
+
+/* Keep the workspace navigation state in sync with the selected section. */
+const workspaceLinks=[...document.querySelectorAll(".sidebar .side-link")];
+function setActiveWorkspaceLink(hash){
+ workspaceLinks.forEach(link=>{
+  const active=link.getAttribute("href")===hash;
+  link.classList.toggle("active",active);
+  if(active)link.setAttribute("aria-current","location");
+  else link.removeAttribute("aria-current");
+ });
+}
+workspaceLinks.forEach(link=>link.addEventListener("click",()=>{
+ setActiveWorkspaceLink(link.getAttribute("href"));
+}));
+const workspaceSections=["#overview","#applications"].map(id=>document.querySelector(id)).filter(Boolean);
+if("IntersectionObserver" in window){
+ const sectionObserver=new IntersectionObserver(entries=>{
+  const visible=entries.filter(entry=>entry.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio)[0];
+  if(visible)setActiveWorkspaceLink("#"+visible.target.id);
+ },{rootMargin:"-18% 0px -62% 0px",threshold:[0,.1,.25,.5]});
+ workspaceSections.forEach(section=>sectionObserver.observe(section));
+}
