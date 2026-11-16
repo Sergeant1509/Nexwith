@@ -12,6 +12,8 @@ const esc=value=>String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;
 const dateValue=v=>v?.toDate?v.toDate():v?.seconds?new Date(v.seconds*1000):v?new Date(v):null;
 const fmt=v=>{const d=dateValue(v);return d instanceof Date&&!Number.isNaN(d.getTime())?d.toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"}):"—"};
 const timeValue=v=>{const d=dateValue(v);return d instanceof Date&&!Number.isNaN(d.getTime())?d.getTime():0};
+const safeHttpUrl=value=>{try{const raw=String(value||"").trim();if(!raw)return "";const url=new URL(/^https?:\/\//i.test(raw)?raw:"https://"+raw);return url.protocol==="https:"||url.protocol==="http:"?url.href:""}catch{return ""}};
+
 function emailLink(app,status){
  const subject=status==="accepted"?"Nexwith application — Accepted":status==="rejected"?"Update on your Nexwith application":"Your Nexwith application";
  const body=status==="accepted"
@@ -27,8 +29,25 @@ const search=$("#search-input").value.toLowerCase(),status=$("#status-filter").v
 let list=applications.filter(a=>(status==="all"?(a.status||"pending")!=="":(a.status||"pending")===status)&&(role==="all"||a.role===role)&&[a.name,a.email,a.city,a.role,a.phone].some(v=>String(v||"").toLowerCase().includes(search)));
 list.sort((a,b)=>sort==="name"?String(a.name||"").localeCompare(b.name||""):sort==="oldest"?(dateValue(a.createdAt)||0)-(dateValue(b.createdAt)||0):(dateValue(b.createdAt)||0)-(dateValue(a.createdAt)||0));
 $("#results-count").textContent=list.length+" applications";$("#applications-body").innerHTML=list.length?list.map(a=>'<tr><td><strong>'+esc(a.name)+'</strong><small>'+esc(a.email)+'</small></td><td>'+esc(a.city||"—")+'</td><td>'+esc(a.role||"—")+'</td><td>'+fmt(a.createdAt)+'</td><td><span class="status '+esc(a.status||"pending")+'">'+esc(a.status||"pending")+'</span></td><td><div class="row-actions"><button class="tiny-btn" data-view="'+esc(a.id)+'">Review</button><button class="tiny-btn" data-email="'+esc(a.id)+'">Email ↗</button></div></td></tr>').join(""):'<tr><td colspan="6" class="empty-cell">No applications match these filters.</td></tr>';
-$("#applications-body").querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>openReview(b.dataset.view)));$("#applications-body").querySelectorAll("[data-email]").forEach(b=>b.addEventListener("click",()=>{const a=applications.find(x=>x.id===b.dataset.email);if(a)emailLink(a,"contact");}));}
-function openReview(id){selected=applications.find(a=>a.id===id);if(!selected)return;$("#detail-name").textContent=selected.name||"Applicant";$("#detail-meta").textContent=[selected.city,selected.role,fmt(selected.createdAt)].filter(Boolean).join(" · ");const items=[["Email",selected.email],["Phone",selected.phone],["City",selected.city],["Education",selected.education],["Opportunity",selected.role],["Availability",selected.availability],["Resume",selected.resumeLink?'<a href="'+esc(selected.resumeLink)+'" target="_blank" rel="noopener">Open resume ↗</a>':"Not provided"],["Portfolio / LinkedIn",selected.links?'<a href="'+esc(selected.links)+'" target="_blank" rel="noopener">Open link ↗</a>':"Not provided"],["About applicant",selected.about||"—"]];$("#detail-content").innerHTML=items.map(([k,v])=>'<div class="detail-item '+(k==="About applicant"?"full":"")+'"><label>'+esc(k)+'</label><div>'+(["Resume","Portfolio / LinkedIn"].includes(k)?v:esc(v))+'</div></div>').join("");$("#review-status").value=selected.status||"pending";$("#review-notes").value=selected.reviewNotes||"";$("#review-feedback").textContent="";$("#review-dialog").showModal();}
+$("#applications-body").querySelectorAll("[data-view]").forEach(b=>b.addEventLisfunction openReview(id){
+ selected=applications.find(a=>a.id===id);
+ if(!selected)return;
+ $("#detail-name").textContent=selected.name||"Applicant";
+ $("#detail-meta").textContent=[selected.city,selected.role,fmt(selected.createdAt)].filter(Boolean).join(" · ");
+ const resumeUrl=safeHttpUrl(selected.resumeLink),portfolioUrl=safeHttpUrl(selected.links);
+ const items=[
+  ["Email",selected.email],["Phone",selected.phone],["City",selected.city],
+  ["Education",selected.education],["Opportunity",selected.role],["Availability",selected.availability],
+  ["Resume",resumeUrl?'<a href="'+esc(resumeUrl)+'" target="_blank" rel="noopener noreferrer">Open resume ↗</a>':"Not provided or invalid link"],
+  ["Portfolio / LinkedIn",portfolioUrl?'<a href="'+esc(portfolioUrl)+'" target="_blank" rel="noopener noreferrer">Open link ↗</a>':"Not provided or invalid link"],
+  ["About applicant",selected.about||"—"]
+ ];
+ $("#detail-content").innerHTML=items.map(([k,v])=>'<div class="detail-item '+(k==="About applicant"?"full":"")+'"><label>'+esc(k)+'</label><div>'+(["Resume","Portfolio / LinkedIn"].includes(k)?v:esc(v))+'</div></div>').join("");
+ $("#review-status").value=selected.status||"pending";
+ $("#review-notes").value=selected.reviewNotes||"";
+ $("#review-feedback").textContent="";
+ $("#review-dialog").showModal();
+} / LinkedIn"].includes(k)?v:esc(v))+'</div></div>').join("");$("#review-status").value=selected.status||"pending";$("#review-notes").value=selected.reviewNotes||"";$("#review-feedback").textContent="";$("#review-dialog").showModal();}
 $("#save-review").addEventListener("click",async()=>{if(!selected)return;const status=$("#review-status").value,reviewNotes=$("#review-notes").value.trim();$("#save-review").disabled=true;try{await updateDoc(doc(db,"applications",selected.id),{status,reviewNotes,updatedAt:serverTimestamp()});$("#review-feedback").textContent="Review saved.";if(status==="accepted"||status==="rejected")$("#review-feedback").textContent+=" Use the email button to prepare the decision email."; }catch(e){console.error(e);$("#review-feedback").textContent="Could not save. Check Firestore security rules."; }finally{$("#save-review").disabled=false;}});
 $("#email-applicant").addEventListener("click",()=>{if(selected)emailLink(selected,$("#review-status").value);});
 function exportRows(){return applications.map(a=>({"Name":a.name||"","Email":a.email||"","Phone":a.phone||"","City":a.city||"","Education":a.education||"","Opportunity":a.role||"","Availability":a.availability||"","About":a.about||"","Resume link":a.resumeLink||"","Portfolio / LinkedIn":a.links||"","Status":a.status||"pending","Review notes":a.reviewNotes||"","Submitted":fmt(a.createdAt)}));}
