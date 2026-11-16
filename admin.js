@@ -37,6 +37,26 @@ $("#export-xlsx").addEventListener("click",()=>{if(!applications.length)return a
 ["#search-input","#status-filter","#role-filter","#sort-filter"].forEach(s=>$(s).addEventListener("input",render));
 $("#google-login").addEventListener("click",async()=>{try{$("#login-error").textContent="";await signInWithPopup(auth,provider);}catch(e){console.error(e);$("#login-error").textContent=e.code==="auth/unauthorized-domain"?"Add nexwith.vercel.app to Firebase Authentication authorized domains.":e.message||"Google sign-in failed."; }});
 function startRealtime(){if(unsubscribe)unsubscribe();unsubscribe=onSnapshot(collection(db,"applications"),snap=>{applications=snap.docs.map(d=>({id:d.id,...d.data()}));$("#sync-state").textContent="● Live · synced";render();},e=>{console.error(e);$("#sync-state").textContent="Connection error";$("#applications-body").innerHTML='<tr><td colspan="6" class="empty-cell">Could not read applications. Check Firestore rules and indexes.</td></tr>';});}
-function showSignedIn(user){if(!ADMIN_EMAILS.includes((user.email||"").toLowerCase())){signOut(auth);loginView.hidden=false;dashboard.hidden=true;$("#login-error").textContent="This Google account is not authorized for Nexwith administration.";return;}loginView.hidden=true;dashboard.hidden=false;$("#signout-btn").hidden=false;$("#signout-top").hidden=false;startRealtime();}
-onAuthStateChanged(auth,user=>{if(user)showSignedIn(user);else{if(unsubscribe)unsubscribe();loginView.hidden=false;dashboard.hidden=true;$("#signout-btn").hidden=true;$("#signout-top").hidden=true;$("#sync-state").textContent="Signed out";}});
-$("#signout-btn").addEventListener("click",()=>signOut(auth));$("#signout-top").addEventListener("click",()=>signOut(auth));
+function setAuthViews(isSignedIn){
+ loginView.hidden=isSignedIn;
+ dashboard.hidden=!isSignedIn;
+ loginView.classList.toggle("view-hidden",isSignedIn);
+ dashboard.classList.toggle("view-hidden",!isSignedIn);
+ loginView.style.display=isSignedIn?"none":"grid";
+ dashboard.style.display=isSignedIn?"block":"none";
+}
+function showSignedIn(user){
+ if(!ADMIN_EMAILS.includes((user.email||"").toLowerCase())){
+  setAuthViews(false);
+  $("#signout-top").hidden=true;
+  $("#login-error").textContent="This Google account is not authorized for Nexwith administration.";
+  signOut(auth);
+  return;
+ }
+ $("#login-error").textContent="";
+ setAuthViews(true);
+ $("#signout-top").hidden=false;
+ startRealtime();
+}
+onAuthStateChanged(auth,user=>{if(user)showSignedIn(user);else{if(unsubscribe){unsubscribe();unsubscribe=null;}setAuthViews(false);$("#signout-top").hidden=true;$("#sync-state").textContent="Signed out";}});
+$("#signout-top").addEventListener("click",()=>signOut(auth));
