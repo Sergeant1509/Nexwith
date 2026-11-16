@@ -13,8 +13,7 @@ service cloud.firestore {
 
     match /applications/{applicationId} {
       // Public applicants may submit one document keyed by their normalized email.
-      allow create: if request.auth == null
-        && applicationId == request.resource.data.email
+      allow create: if applicationId == request.resource.data.email
         && request.resource.data.keys().hasOnly([
           'name','email','phone','city','education','role','availability',
           'about','resumeLink','links','createdAt'
