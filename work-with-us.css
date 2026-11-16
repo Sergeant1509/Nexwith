@@ -249,6 +249,6 @@
 
 
 /* Recruitment page anchor offset: account for the sticky navigation bar. */
-html{scroll-padding-top:112px}
-.work-page [id]{scroll-margin-top:112px}
+html{scroll-padding-top:106px}
+.work-page [id]{scroll-margin-top:0}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
