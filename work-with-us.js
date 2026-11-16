@@ -148,7 +148,7 @@ form?.addEventListener("submit", async event => {
         eyebrow: "NEXWITH / QUICK PAUSE",
         title: "That didn't go through.",
         message: "Your application hasn't been submitted yet.",
-        detail: "Please try again in a moment. If the issue continues, contact us at nexwith@yahoo.com.",
+        detail: "Please try again in a moment. If the issue continues, contact us at nexwith@gmail.com.",
         icon: "!"
       });
     }
