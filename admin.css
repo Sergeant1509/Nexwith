@@ -38,3 +38,34 @@ body{background:var(--paper);color:var(--ink);font-family:var(--font-body);-webk
 /* QA hardening: never render hidden auth/dashboard panels. */
 [hidden],.view-hidden{display:none!important}
 #login-view[hidden],#dashboard-view[hidden]{display:none!important}
+
+/* Sign-in is a standalone gate; no workspace chrome is visible before auth. */
+.login-screen{
+ min-height:100vh;
+ min-height:100dvh;
+ display:grid;
+ place-items:center;
+ padding:24px;
+ background:var(--paper);
+}
+.login-screen[hidden],.admin-shell[hidden]{display:none!important}
+.login-screen .login-card{
+ width:min(420px,100%);
+ padding:36px;
+ text-align:left;
+ border-top:3px solid var(--blue);
+ box-shadow:0 18px 48px rgba(17,29,50,.08);
+}
+.login-screen .login-symbol{
+ display:block;
+ width:48px;
+ height:48px;
+ object-fit:contain;
+ margin:0 0 27px;
+}
+.login-screen .login-card h2{margin:9px 0}
+.login-screen .login-card p{line-height:1.55}
+.login-screen .login-card .primary-btn{width:100%;margin-top:24px;min-height:44px}
+.login-screen .error-text:empty{display:none}
+.login-screen .error-text{margin:12px 0 0;min-height:0}
+@media(max-width:480px){.login-screen{padding:18px}.login-screen .login-card{padding:28px 24px}}
