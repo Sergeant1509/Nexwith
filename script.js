@@ -28,6 +28,27 @@
     if (nav?.classList.contains('open') && !nav.contains(event.target) && !menuButton?.contains(event.target)) closeMenu();
   });
 
+
+  // Consistent anchor scrolling: account for the sticky header instead of
+  // relying on the browser's default hash alignment.
+  document.addEventListener('click', event => {
+    const link = event.target.closest('a[href*="#"]');
+    if (!link || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    let destination;
+    try { destination = new URL(link.href, window.location.href); } catch { return; }
+    if (destination.origin !== window.location.origin || destination.pathname.replace(/\\/$/, '') !== window.location.pathname.replace(/\\/$/, '') || !destination.hash) return;
+    const id = decodeURIComponent(destination.hash.slice(1));
+    const target = document.getElementById(id);
+    if (!target) return;
+    event.preventDefault();
+    closeMenu();
+    if (window.location.hash !== destination.hash) history.pushState(null, '', destination.hash);
+    const stickyHeader = document.querySelector('.header');
+    const headerHeight = stickyHeader ? stickyHeader.getBoundingClientRect().height : 0;
+    const top = target.getBoundingClientRect().top + window.scrollY - headerHeight - 22;
+    window.scrollTo({ top: Math.max(0, top), behavior: reduceMotion ? 'auto' : 'smooth' });
+  });
+
   // Reveal content as it enters view. No layout measurements are done per frame.
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const revealTargets = $$('.section-head, .service-item, .price-card, .steps article, .faq-list details, .contact-copy, .lead-form, .closing-inner');
