@@ -120,5 +120,26 @@
     heroObserver.observe(hero);
   }
 
-  // Pointer parallax removed: keep the hero responsive without continuous pointer work.
+  // Subtle pointer parallax on the hero composition, disabled for touch/reduced motion.
+  const visual = $('.hero-visual');
+  if (visual && !reduceMotion && window.matchMedia('(pointer:fine)').matches) {
+    let frame = 0;
+    let pointerX = 0;
+    let pointerY = 0;
+    visual.addEventListener('pointermove', event => {
+      const rect = visual.getBoundingClientRect();
+      pointerX = ((event.clientX - rect.left) / rect.width - .5) * 5;
+      pointerY = ((event.clientY - rect.top) / rect.height - .5) * 5;
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        visual.style.setProperty('--pointer-x', `${pointerX}px`);
+        visual.style.setProperty('--pointer-y', `${pointerY}px`);
+        frame = 0;
+      });
+    });
+    visual.addEventListener('pointerleave', () => {
+      visual.style.setProperty('--pointer-x', '0px');
+      visual.style.setProperty('--pointer-y', '0px');
+    });
+  }
 })();
