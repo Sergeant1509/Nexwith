@@ -139,8 +139,8 @@ form?.addEventListener("submit", async event => {
       showIssuePopup({
         eyebrow: "NEXWITH / APPLICATION CHECK",
         title: "Already made your move?",
-        message: "This email may already be on our list.",
-        detail: "We keep applications to one per email address. If this is your first attempt, check your details and try again shortly, or reach out to our team.",
+        message: "This email may already have an application, or submission permissions are not active.",
+        detail: "Applications are limited to one per email address. If this is your first attempt, contact nexwith@gmail.com so the team can check the submission permissions.",
         icon: "↗"
       });
     } else {
