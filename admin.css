@@ -34,3 +34,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--font-body);-webk
 
 /* Ensure authenticated view switching respects the HTML hidden attribute. */
 [hidden]{display:none!important}
+
+/* QA hardening: never render hidden auth/dashboard panels. */
+[hidden],.view-hidden{display:none!important}
+#login-view[hidden],#dashboard-view[hidden]{display:none!important}
