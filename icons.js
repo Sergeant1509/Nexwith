@@ -45,8 +45,14 @@
     document.querySelectorAll(".close-btn").forEach(el => replaceIcon(el, "x"));
     document.querySelectorAll(".side-link").forEach(el => {
       const label = el.textContent.toLowerCase();
-      replaceIcon(el, label.includes("overview") ? "layout-dashboard" : "users");
-      el.prepend(el.querySelector("[data-lucide]"));
+      const name = label.includes("overview") ? "layout-dashboard" : "users";
+      let icon = el.querySelector("[data-lucide]");
+      if (!icon) {
+        icon = document.createElement("i");
+        icon.setAttribute("aria-hidden", "true");
+        el.prepend(icon);
+      }
+      icon.setAttribute("data-lucide", name);
     });
     document.querySelectorAll("#export-csv").forEach(el => addLeading(el, "file-spreadsheet"));
     document.querySelectorAll("#export-xlsx").forEach(el => addLeading(el, "file-down"));
