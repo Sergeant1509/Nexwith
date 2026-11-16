@@ -120,4 +120,5 @@
     heroObserver.observe(hero);
   }
 
-  // Pointer parallax removed: keep the hero responsive without continuous pointer work.})();
+  // Pointer parallax removed: keep the hero responsive without continuous pointer work.
+})();
