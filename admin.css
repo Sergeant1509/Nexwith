@@ -69,3 +69,9 @@ body{background:var(--paper);color:var(--ink);font-family:var(--font-body);-webk
 .login-screen .error-text:empty{display:none}
 .login-screen .error-text{margin:12px 0 0;min-height:0}
 @media(max-width:480px){.login-screen{padding:18px}.login-screen .login-card{padding:28px 24px}}
+
+/* Selected workspace navigation item */
+.sidebar .side-link{transition:background-color .18s ease,color .18s ease,box-shadow .18s ease}
+.sidebar .side-link.active{background:#eaf0f6;color:#1768d2;box-shadow:inset 3px 0 #1768d2;font-weight:700}
+.sidebar .side-link[aria-current="location"]{background:#eaf0f6;color:#1768d2}
+.sidebar .side-link:focus-visible{outline:2px solid #1768d2;outline-offset:2px}
