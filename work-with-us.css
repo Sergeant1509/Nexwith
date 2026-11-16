@@ -252,3 +252,16 @@
 html{scroll-padding-top:106px}
 .work-page [id]{scroll-margin-top:0}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+
+/* Consistent Lucide icon language */
+[data-lucide],svg.lucide{width:17px;height:17px;flex:0 0 auto;stroke-width:1.8;vertical-align:middle}
+.note-icon [data-lucide],.note-icon svg{width:16px;height:16px}
+.service-icon [data-lucide],.service-icon svg{width:17px;height:17px}
+.plan-symbol [data-lucide],.plan-symbol svg{width:18px;height:18px}
+.price-link [data-lucide],.opp-link [data-lucide],.nav-contact [data-lucide],.btn [data-lucide],.mobile-contact [data-lucide],.resume-drive-btn [data-lucide]{width:15px;height:15px}
+.contact-links a b [data-lucide],.contact-links a b svg{width:15px;height:15px}
+.menu-toggle [data-lucide]{width:20px;height:20px}
+
+.art-card-icon [data-lucide],.art-card-icon svg,.opp-icon [data-lucide],.opp-icon svg{width:18px;height:18px}
+.resume-drive-btn [data-lucide]{width:14px;height:14px}
