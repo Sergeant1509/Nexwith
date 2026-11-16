@@ -247,3 +247,8 @@
   position:relative;
 }
 
+
+/* Recruitment page anchor offset: account for the sticky navigation bar. */
+html{scroll-padding-top:112px}
+.work-page [id]{scroll-margin-top:112px}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
