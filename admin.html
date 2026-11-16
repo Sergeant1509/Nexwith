@@ -11,13 +11,13 @@
 </head>
 <body>
 <div class="admin-shell">
-  <aside class="sidebar"><a class="brand" href="/"><span class="brand-mark">N</span><span>NEXWITH<small>RECRUITMENT CRM</small></span></a>
+  <aside class="sidebar"><a class="brand" href="/" aria-label="Nexwith home"><img src="nexwith-logo.png" alt="Nexwith"><span class="brand-divider"></span><span class="brand-caption">RECRUITMENT<br>WORKSPACE</span></a>
     <div class="side-label">WORKSPACE</div><a class="side-link active" href="#overview">▦ <span>Overview</span></a><a class="side-link" href="#applications">▤ <span>Applications</span></a>
     <div class="sidebar-bottom"><span class="live-dot"></span> Live database connection <button id="signout-btn" class="signout-btn" hidden>Sign out</button></div>
   </aside>
   <main class="main">
     <header class="topbar"><div><div class="eyebrow">NEXWITH / PEOPLE OPERATIONS</div><h1>Recruitment dashboard</h1></div><div class="top-actions"><span id="sync-state" class="sync-state">Connecting…</span><button id="signout-top" class="secondary-btn" hidden>Sign out</button></div></header>
-    <section id="login-view" class="login-wrap"><div class="login-card"><div class="login-symbol">N</div><div class="eyebrow">RESTRICTED ACCESS</div><h2>Administrator sign in</h2><p>Sign in with an authorized Nexwith administrator Google account.</p><button id="google-login" class="primary-btn">Continue with Google <span>↗</span></button><p id="login-error" class="error-text" role="alert"></p></div></section>
+    <section id="login-view" class="login-wrap"><div class="login-card"><img class="login-symbol" src="nexwith-symbol.svg" alt="Nexwith"><div class="eyebrow">RESTRICTED ACCESS</div><h2>Administrator sign in</h2><p>Sign in with an authorized Nexwith administrator Google account.</p><button id="google-login" class="primary-btn">Continue with Google <span>↗</span></button><p id="login-error" class="error-text" role="alert"></p></div></section>
     <section id="dashboard-view" hidden>
       <section class="stats-grid" id="overview">
         <article class="stat-card"><span>Total applications</span><strong id="total-count">0</strong><small>All submitted applications</small></article>
