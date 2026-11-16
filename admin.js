@@ -34,15 +34,28 @@ $("#applications-body").querySelectorAll("[data-view]").forEach(b=>b.addEventLis
  if(!selected)return;
  $("#detail-name").textContent=selected.name||"Applicant";
  $("#detail-meta").textContent=[selected.city,selected.role,fmt(selected.createdAt)].filter(Boolean).join(" · ");
- const resumeUrl=safeHttpUrl(selected.resumeLink),portfolioUrl=safeHttpUrl(selected.links);
+ const resumeUrl=safeHttpUrl(selected.resumeLink);
+ const portfolioUrl=safeHttpUrl(selected.links);
  const items=[
-  ["Email",selected.email],["Phone",selected.phone],["City",selected.city],
-  ["Education",selected.education],["Opportunity",selected.role],["Availability",selected.availability],
+  ["Email",selected.email],
+  ["Phone",selected.phone],
+  ["City",selected.city],
+  ["Education",selected.education],
+  ["Opportunity",selected.role],
+  ["Availability",selected.availability],
   ["Resume",resumeUrl?'<a href="'+esc(resumeUrl)+'" target="_blank" rel="noopener noreferrer">Open resume ↗</a>':"Not provided or invalid link"],
   ["Portfolio / LinkedIn",portfolioUrl?'<a href="'+esc(portfolioUrl)+'" target="_blank" rel="noopener noreferrer">Open link ↗</a>':"Not provided or invalid link"],
   ["About applicant",selected.about||"—"]
  ];
- $("#detail-content").innerHTML=items.map(([k,v])=>'<div class="detail-item '+(k==="About applicant"?"full":"")+'"><label>'+esc(k)+'</label><div>'+(["Resume","Portfolio
+ $("#detail-content").innerHTML=items.map(([k,v])=>{
+  const value=(k==="Resume"||k==="Portfolio / LinkedIn")?v:esc(v);
+  return '<div class="detail-item '+(k==="About applicant"?"full":"")+'"><label>'+esc(k)+'</label><div>'+value+'</div></div>';
+ }).join("");
+ $("#review-status").value=selected.status||"pending";
+ $("#review-notes").value=selected.reviewNotes||"";
+ $("#review-feedback").textContent="";
+ $("#review-dialog").showModal();
+}
 $("#save-review").addEventListener("click",async()=>{if(!selected)return;const status=$("#review-status").value,reviewNotes=$("#review-notes").value.trim();$("#save-review").disabled=true;try{await updateDoc(doc(db,"applications",selected.id),{status,reviewNotes,updatedAt:serverTimestamp()});$("#review-feedback").textContent="Review saved.";if(status==="accepted"||status==="rejected")$("#review-feedback").textContent+=" Use the email button to prepare the decision email."; }catch(e){console.error(e);$("#review-feedback").textContent="Could not save. Check Firestore security rules."; }finally{$("#save-review").disabled=false;}});
 $("#email-applicant").addEventListener("click",()=>{if(selected)emailLink(selected,$("#review-status").value);});
 function exportRows(){return applications.map(a=>({"Name":a.name||"","Email":a.email||"","Phone":a.phone||"","City":a.city||"","Education":a.education||"","Opportunity":a.role||"","Availability":a.availability||"","About":a.about||"","Resume link":a.resumeLink||"","Portfolio / LinkedIn":a.links||"","Status":a.status||"pending","Review notes":a.reviewNotes||"","Submitted":fmt(a.createdAt)}));}
