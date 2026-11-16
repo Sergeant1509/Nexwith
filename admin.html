@@ -9,18 +9,18 @@
 <title>Admin — Nexwith</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="admin.css?v=20261116-qa3">
+<link rel="stylesheet" href="admin.css?v=20261116-qa4">
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 </head>
 <body>
-<div class="admin-shell">
+<section id="login-view" class="login-screen"><div class="login-card"><img class="login-symbol" src="nexwith-symbol.svg" alt="Nexwith"><div class="eyebrow">RESTRICTED ACCESS</div><h2>Administrator sign in</h2><p>Sign in with an authorized Nexwith administrator Google account.</p><button id="google-login" class="primary-btn" type="button">Continue with Google <span>↗</span></button><p id="login-error" class="error-text" role="alert"></p></div></section>
+<div class="admin-shell" id="admin-shell" hidden>
   <aside class="sidebar"><a class="brand" href="/" aria-label="Nexwith home"><img src="nexwith-logo.png" alt="Nexwith"><span class="brand-divider"></span><span class="brand-caption">RECRUITMENT<br>WORKSPACE</span></a>
     <div class="side-label">WORKSPACE</div><a class="side-link active" href="#overview">▦ <span>Overview</span></a><a class="side-link" href="#applications">▤ <span>Applications</span></a>
     <div class="sidebar-bottom"><span class="live-dot"></span> Live database connection </div>
   </aside>
   <main class="main">
     <header class="topbar"><div><div class="eyebrow">NEXWITH / PEOPLE OPERATIONS</div><h1>Recruitment dashboard</h1></div><div class="top-actions"><span id="sync-state" class="sync-state">Connecting…</span><button id="signout-top" class="secondary-btn" hidden>Sign out</button></div></header>
-    <section id="login-view" class="login-wrap"><div class="login-card"><img class="login-symbol" src="nexwith-symbol.svg" alt="Nexwith"><div class="eyebrow">RESTRICTED ACCESS</div><h2>Administrator sign in</h2><p>Sign in with an authorized Nexwith administrator Google account.</p><button id="google-login" class="primary-btn">Continue with Google <span>↗</span></button><p id="login-error" class="error-text" role="alert"></p></div></section>
     <section id="dashboard-view" hidden>
       <section class="stats-grid" id="overview">
         <article class="stat-card"><span>Total applications</span><strong id="total-count">0</strong><small>All submitted applications</small></article>
@@ -38,5 +38,5 @@
   </main>
 </div>
 <dialog id="review-dialog" class="review-dialog"><form method="dialog" class="dialog-head"><div><div class="eyebrow">APPLICATION PROFILE</div><h2 id="detail-name">Applicant</h2><p id="detail-meta"></p></div><button class="close-btn" aria-label="Close">×</button></form><div id="detail-content" class="detail-content"></div><div class="review-controls"><label for="review-status">Application status</label><select id="review-status"><option value="pending">Pending</option><option value="shortlisted">Shortlisted</option><option value="accepted">Accepted</option><option value="rejected">Rejected</option></select><label for="review-notes">Internal review notes</label><textarea id="review-notes" rows="4" placeholder="Add interview notes, observations or follow-up…"></textarea><div class="dialog-actions"><button id="save-review" type="button" class="primary-btn">Save review</button><button id="email-applicant" type="button" class="secondary-btn">Email applicant ↗</button></div><p id="review-feedback" class="feedback"></p></div></dialog>
-<script type="module" src="admin.js?v=20261116-qa6"></script>
+<script type="module" src="admin.js?v=20261116-qa7"></script>
 </body></html>
