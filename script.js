@@ -36,7 +36,8 @@
     if (!link || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     let destination;
     try { destination = new URL(link.href, window.location.href); } catch { return; }
-    if (destination.origin !== window.location.origin || destination.pathname.replace(/\\/$/, '') !== window.location.pathname.replace(/\\/$/, '') || !destination.hash) return;
+    const normalizePath = path => path.length > 1 ? path.replace(/\/+$/, '') : path;
+    if (destination.origin !== window.location.origin || normalizePath(destination.pathname) !== normalizePath(window.location.pathname) || !destination.hash) return;
     const id = decodeURIComponent(destination.hash.slice(1));
     const target = document.getElementById(id);
     if (!target) return;
