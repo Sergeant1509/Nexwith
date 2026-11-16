@@ -35,15 +35,35 @@ function exportRows(){return applications.map(a=>({"Name":a.name||"","Email":a.e
 $("#export-csv").addEventListener("click",()=>{const rows=exportRows();if(!rows.length)return alert("No applications to export.");const keys=Object.keys(rows[0]),csv=[keys,...rows.map(r=>keys.map(k=>r[k]))].map(row=>row.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\r\n");const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="nexwith-applications-"+new Date().toISOString().slice(0,10)+".csv";a.click();URL.revokeObjectURL(url);});
 $("#export-xlsx").addEventListener("click",()=>{if(!applications.length)return alert("No applications to export.");if(!window.XLSX)return alert("Excel export library did not load. Use CSV export instead.");const sheet=XLSX.utils.json_to_sheet(exportRows());const book=XLSX.utils.book_new();XLSX.utils.book_append_sheet(book,sheet,"Applications");XLSX.writeFile(book,"nexwith-applications-"+new Date().toISOString().slice(0,10)+".xlsx");});
 ["#search-input","#status-filter","#role-filter","#sort-filter"].forEach(s=>$(s).addEventListener("input",render));
-$("#google-login").addEventListener("click",async()=>{try{$("#login-error").textContent="";await signInWithPopup(auth,provider);}catch(e){console.error(e);$("#login-error").textContent=e.code==="auth/unauthorized-domain"?"Add nexwith.vercel.app to Firebase Authentication authorized domains.":e.message||"Google sign-in failed."; }});
+$("#google-login").addEventListener("click",async()=>{
+ const button=$("#google-login");
+ try{
+  $("#login-error").textContent="";
+  button.disabled=true;
+  button.textContent="Opening Google sign-in…";
+  await signInWithPopup(auth,provider);
+ }catch(e){
+  console.error(e);
+  const messages={
+   "auth/unauthorized-domain":"Add nexwith.vercel.app to Firebase Authentication → Settings → Authorized domains.",
+   "auth/popup-closed-by-user":"The sign-in window was closed before completion. Try again.",
+   "auth/popup-blocked":"Your browser blocked the sign-in window. Allow pop-ups for this site and try again.",
+   "auth/network-request-failed":"Network connection failed. Check your connection and retry."
+  };
+  $("#login-error").textContent=messages[e.code]||e.message||"Google sign-in failed. Please try again.";
+ }finally{
+  button.disabled=false;
+  button.innerHTML='Continue with Google <span>↗</span>';
+ }
+});
 function startRealtime(){if(unsubscribe)unsubscribe();unsubscribe=onSnapshot(collection(db,"applications"),snap=>{applications=snap.docs.map(d=>({id:d.id,...d.data()}));$("#sync-state").textContent="● Live · synced";render();},e=>{console.error(e);$("#sync-state").textContent="Connection error";$("#applications-body").innerHTML='<tr><td colspan="6" class="empty-cell">Could not read applications. Check Firestore rules and indexes.</td></tr>';});}
 function setAuthViews(isSignedIn){
  loginView.hidden=isSignedIn;
  dashboard.hidden=!isSignedIn;
  loginView.classList.toggle("view-hidden",isSignedIn);
  dashboard.classList.toggle("view-hidden",!isSignedIn);
- loginView.style.display=isSignedIn?"none":"grid";
- dashboard.style.display=isSignedIn?"block":"none";
+ loginView.style.display=isSignedIn?"none":"";
+ dashboard.style.display=isSignedIn?"":"none";
 }
 function showSignedIn(user){
  if(!ADMIN_EMAILS.includes((user.email||"").toLowerCase())){
