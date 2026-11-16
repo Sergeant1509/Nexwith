@@ -5,105 +5,83 @@ const firebaseConfig={apiKey:"AIzaSyD3rHEGsWneMRHmxSXuWtr8m9wI9zqWS_o",authDomai
 const ADMIN_EMAILS=["nexwith@gmail.com","abhijeet.gautam1509@gmail.com","paarijaat366@gmail.com"];
 const app=initializeApp(firebaseConfig),db=getFirestore(app),auth=getAuth(app),provider=new GoogleAuthProvider();
 provider.setCustomParameters({prompt:"select_account"});
-const $=s=>document.querySelector(s);
+const $=s=>document.querySelector(s),loginView=$("#login-view"),workspace=$("#admin-shell"),dashboard=$("#dashboard-view");
 let applications=[],selected=null,unsubscribe=null;
-const loginView=$("#login-view"),dashboard=$("#dashboard-view");
-const esc=value=>String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const dateValue=v=>v?.toDate?v.toDate():v?.seconds?new Date(v.seconds*1000):v?new Date(v):null;
-const fmt=v=>{const d=dateValue(v);return d instanceof Date&&!Number.isNaN(d.getTime())?d.toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"}):"—"};
 const timeValue=v=>{const d=dateValue(v);return d instanceof Date&&!Number.isNaN(d.getTime())?d.getTime():0};
-const safeHttpUrl=value=>{try{const raw=String(value||"").trim();if(!raw)return "";const url=new URL(/^https?:\/\//i.test(raw)?raw:"https://"+raw);return url.protocol==="https:"||url.protocol==="http:"?url.href:""}catch{return ""}};
-
-function emailLink(app,status){
+const fmt=v=>{const d=dateValue(v);return d instanceof Date&&!Number.isNaN(d.getTime())?d.toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"}):"—"};
+const safeUrl=v=>{try{const s=String(v||"").trim();if(!s)return "";const u=new URL(/^https?:\/\//i.test(s)?s:"https://"+s);return u.protocol==="https:"||u.protocol==="http:"?u.href:""}catch{return ""}};
+function showLogin(message=""){loginView.hidden=false;workspace.hidden=true;$("#login-error").textContent=message;}
+function showWorkspace(){loginView.hidden=true;workspace.hidden=false;dashboard.hidden=false;$("#signout-top").hidden=false;}
+function emailLink(a,status){
  const subject=status==="accepted"?"Nexwith application — Accepted":status==="rejected"?"Update on your Nexwith application":"Your Nexwith application";
- const body=status==="accepted"
-  ?`Hello ${app.name||"there"},\n\nThank you for applying to Nexwith. We are pleased to inform you that your application has been accepted. We will contact you with the next steps shortly.\n\nRegards,\nNexwith Team`
-  :status==="rejected"
-  ?`Hello ${app.name||"there"},\n\nThank you for your interest in Nexwith and for taking the time to apply. After reviewing your application, we will not be moving forward at this stage. We appreciate your effort and wish you the best.\n\nRegards,\nNexwith Team`
-  :`Hello ${app.name||"there"},\n\nThank you for your application to Nexwith. We would like to discuss your application further.\n\nRegards,\nNexwith Team`;
- window.location.href=`mailto:${encodeURIComponent(app.email||"")}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+ let body="Hello "+(a.name||"there")+",\n\nThank you for your application to Nexwith.\n\nRegards,\nNexwith Team";
+ if(status==="accepted")body="Hello "+(a.name||"there")+",\n\nThank you for applying to Nexwith. We are pleased to inform you that your application has been accepted. We will contact you with the next steps shortly.\n\nRegards,\nNexwith Team";
+ if(status==="rejected")body="Hello "+(a.name||"there")+",\n\nThank you for your interest in Nexwith. After reviewing your application, we will not be moving forward at this stage. We appreciate your effort and wish you the best.\n\nRegards,\nNexwith Team";
+ window.location.href="mailto:"+encodeURIComponent(a.email||"")+"?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(body);
 }
-function render(){const statusCounts={pending:0,accepted:0,rejected:0,shortlisted:0};applications.forEach(a=>statusCounts[a.status||"pending"]=(statusCounts[a.status||"pending"]||0)+1);$("#total-count").textContent=applications.length;$("#pending-count").textContent=statusCounts.pending;$("#accepted-count").textContent=statusCounts.accepted;$("#rejected-count").textContent=statusCounts.rejected;
-const roles=[...new Set(applications.map(a=>a.role).filter(Boolean))].sort();const roleSelect=$("#role-filter"),oldRole=roleSelect.value;roleSelect.innerHTML='<option value="all">All opportunities</option>'+roles.map(r=>'<option value="'+esc(r)+'">'+esc(r)+'</option>').join("");if(roles.includes(oldRole))roleSelect.value=oldRole;
-const search=$("#search-input").value.toLowerCase(),status=$("#status-filter").value,role=$("#role-filter").value,sort=$("#sort-filter").value;
-let list=applications.filter(a=>(status==="all"?(a.status||"pending")!=="":(a.status||"pending")===status)&&(role==="all"||a.role===role)&&[a.name,a.email,a.city,a.role,a.phone].some(v=>String(v||"").toLowerCase().includes(search)));
-list.sort((a,b)=>sort==="name"?String(a.name||"").localeCompare(b.name||""):sort==="oldest"?(dateValue(a.createdAt)||0)-(dateValue(b.createdAt)||0):(dateValue(b.createdAt)||0)-(dateValue(a.createdAt)||0));
-$("#results-count").textContent=list.length+" applications";$("#applications-body").innerHTML=list.length?list.map(a=>'<tr><td><strong>'+esc(a.name)+'</strong><small>'+esc(a.email)+'</small></td><td>'+esc(a.city||"—")+'</td><td>'+esc(a.role||"—")+'</td><td>'+fmt(a.createdAt)+'</td><td><span class="status '+esc(a.status||"pending")+'">'+esc(a.status||"pending")+'</span></td><td><div class="row-actions"><button class="tiny-btn" data-view="'+esc(a.id)+'">Review</button><button class="tiny-btn" data-email="'+esc(a.id)+'">Email ↗</button></div></td></tr>').join(""):'<tr><td colspan="6" class="empty-cell">No applications match these filters.</td></tr>';
-$("#applications-body").querySelectorAll("[data-view]").forEach(b=>b.addEventLisfunction openReview(id){
- selected=applications.find(a=>a.id===id);
- if(!selected)return;
- $("#detail-name").textContent=selected.name||"Applicant";
- $("#detail-meta").textContent=[selected.city,selected.role,fmt(selected.createdAt)].filter(Boolean).join(" · ");
- const resumeUrl=safeHttpUrl(selected.resumeLink);
- const portfolioUrl=safeHttpUrl(selected.links);
- const items=[
-  ["Email",selected.email],
-  ["Phone",selected.phone],
-  ["City",selected.city],
-  ["Education",selected.education],
-  ["Opportunity",selected.role],
-  ["Availability",selected.availability],
-  ["Resume",resumeUrl?'<a href="'+esc(resumeUrl)+'" target="_blank" rel="noopener noreferrer">Open resume ↗</a>':"Not provided or invalid link"],
-  ["Portfolio / LinkedIn",portfolioUrl?'<a href="'+esc(portfolioUrl)+'" target="_blank" rel="noopener noreferrer">Open link ↗</a>':"Not provided or invalid link"],
-  ["About applicant",selected.about||"—"]
- ];
- $("#detail-content").innerHTML=items.map(([k,v])=>{
-  const value=(k==="Resume"||k==="Portfolio / LinkedIn")?v:esc(v);
-  return '<div class="detail-item '+(k==="About applicant"?"full":"")+'"><label>'+esc(k)+'</label><div>'+value+'</div></div>';
- }).join("");
- $("#review-status").value=selected.status||"pending";
- $("#review-notes").value=selected.reviewNotes||"";
- $("#review-feedback").textContent="";
- $("#review-dialog").showModal();
+function render(){
+ const counts={pending:0,accepted:0,rejected:0,shortlisted:0};
+ applications.forEach(a=>{const s=a.status||"pending";counts[s]=(counts[s]||0)+1;});
+ $("#total-count").textContent=applications.length;$("#pending-count").textContent=counts.pending;$("#accepted-count").textContent=counts.accepted;$("#rejected-count").textContent=counts.rejected;
+ const roleSelect=$("#role-filter"),oldRole=roleSelect.value,roles=[...new Set(applications.map(a=>a.role).filter(Boolean))].sort();
+ roleSelect.innerHTML='<option value="all">All opportunities</option>'+roles.map(r=>'<option value="'+esc(r)+'">'+esc(r)+'</option>').join("");
+ if(roles.includes(oldRole))roleSelect.value=oldRole;
+ const search=$("#search-input").value.toLowerCase(),status=$("#status-filter").value,role=roleSelect.value,sort=$("#sort-filter").value;
+ let list=applications.filter(a=>(status==="all"||(a.status||"pending")===status)&&(role==="all"||a.role===role)&&[a.name,a.email,a.city,a.role,a.phone].some(v=>String(v||"").toLowerCase().includes(search)));
+ list.sort((a,b)=>sort==="name"?String(a.name||"").localeCompare(String(b.name||"")):sort==="oldest"?timeValue(a.createdAt)-timeValue(b.createdAt):timeValue(b.createdAt)-timeValue(a.createdAt));
+ $("#results-count").textContent=list.length+" applications";
+ $("#applications-body").innerHTML=list.length?list.map(a=>'<tr><td><strong>'+esc(a.name)+'</strong><small>'+esc(a.email)+'</small></td><td>'+esc(a.city||"—")+'</td><td>'+esc(a.role||"—")+'</td><td>'+fmt(a.createdAt)+'</td><td><span class="status '+esc(a.status||"pending")+'">'+esc(a.status||"pending")+'</span></td><td><div class="row-actions"><button class="tiny-btn" data-view="'+esc(a.id)+'">Review</button><button class="tiny-btn" data-email="'+esc(a.id)+'">Email ↗</button></div></td></tr>').join(""):'<tr><td colspan="6" class="empty-cell">No applications match these filters.</td></tr>';
+ $("#applications-body").querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>openReview(b.dataset.view)));
+ $("#applications-body").querySelectorAll("[data-email]").forEach(b=>b.addEventListener("click",()=>{const a=applications.find(x=>x.id===b.dataset.email);if(a)emailLink(a,a.status||"pending");}));
 }
-$("#save-review").addEventListener("click",async()=>{if(!selected)return;const status=$("#review-status").value,reviewNotes=$("#review-notes").value.trim();$("#save-review").disabled=true;try{await updateDoc(doc(db,"applications",selected.id),{status,reviewNotes,updatedAt:serverTimestamp()});$("#review-feedback").textContent="Review saved.";if(status==="accepted"||status==="rejected")$("#review-feedback").textContent+=" Use the email button to prepare the decision email."; }catch(e){console.error(e);$("#review-feedback").textContent="Could not save. Check Firestore security rules."; }finally{$("#save-review").disabled=false;}});
+function openReview(id){
+ selected=applications.find(a=>a.id===id);if(!selected)return;
+ $("#detail-name").textContent=selected.name||"Applicant";$("#detail-meta").textContent=[selected.city,selected.role,fmt(selected.createdAt)].filter(Boolean).join(" · ");
+ const resume=safeUrl(selected.resumeLink),portfolio=safeUrl(selected.links);
+ const rows=[["Email",selected.email],["Phone",selected.phone],["City",selected.city],["Education",selected.education],["Opportunity",selected.role],["Availability",selected.availability],["Resume",resume?'<a href="'+esc(resume)+'" target="_blank" rel="noopener noreferrer">Open resume ↗</a>':"Not provided or invalid link"],["Portfolio / LinkedIn",portfolio?'<a href="'+esc(portfolio)+'" target="_blank" rel="noopener noreferrer">Open link ↗</a>':"Not provided or invalid link"],["About applicant",selected.about||"—"]];
+ $("#detail-content").innerHTML=rows.map(([k,v])=>'<div class="detail-item '+(k==="About applicant"?"full":"")+'"><label>'+esc(k)+'</label><div>'+(["Resume","Portfolio / LinkedIn"].includes(k)?v:esc(v))+'</div></div>').join("");
+ $("#review-status").value=selected.status||"pending";$("#review-notes").value=selected.reviewNotes||"";$("#review-feedback").textContent="";$("#review-dialog").showModal();
+}
+$("#save-review").addEventListener("click",async()=>{
+ if(!selected)return;const button=$("#save-review"),status=$("#review-status").value,reviewNotes=$("#review-notes").value.trim();button.disabled=true;
+ try{await updateDoc(doc(db,"applications",selected.id),{status,reviewNotes,updatedAt:serverTimestamp()});$("#review-feedback").textContent="Review saved.";}
+ catch(e){console.error(e);$("#review-feedback").textContent="Could not save. Check Firestore security rules.";}
+ finally{button.disabled=false;}
+});
 $("#email-applicant").addEventListener("click",()=>{if(selected)emailLink(selected,$("#review-status").value);});
 function exportRows(){return applications.map(a=>({"Name":a.name||"","Email":a.email||"","Phone":a.phone||"","City":a.city||"","Education":a.education||"","Opportunity":a.role||"","Availability":a.availability||"","About":a.about||"","Resume link":a.resumeLink||"","Portfolio / LinkedIn":a.links||"","Status":a.status||"pending","Review notes":a.reviewNotes||"","Submitted":fmt(a.createdAt)}));}
-$("#export-csv").addEventListener("click",()=>{const rows=exportRows();if(!rows.length)return alert("No applications to export.");const keys=Object.keys(rows[0]),csv=[keys,...rows.map(r=>keys.map(k=>r[k]))].map(row=>row.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\r\n");const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="nexwith-applications-"+new Date().toISOString().slice(0,10)+".csv";a.click();URL.revokeObjectURL(url);});
-$("#export-xlsx").addEventListener("click",()=>{if(!applications.length)return alert("No applications to export.");if(!window.XLSX)return alert("Excel export library did not load. Use CSV export instead.");const sheet=XLSX.utils.json_to_sheet(exportRows());const book=XLSX.utils.book_new();XLSX.utils.book_append_sheet(book,sheet,"Applications");XLSX.writeFile(book,"nexwith-applications-"+new Date().toISOString().slice(0,10)+".xlsx");});
+$("#export-csv").addEventListener("click",()=>{
+ if(!applications.length)return alert("No applications to export.");const rows=exportRows(),keys=Object.keys(rows[0]);
+ const csv=[keys,...rows.map(r=>keys.map(k=>r[k]))].map(row=>row.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\r\n");
+ const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="nexwith-applications-"+new Date().toISOString().slice(0,10)+".csv";a.click();URL.revokeObjectURL(url);
+});
+$("#export-xlsx").addEventListener("click",()=>{
+ if(!applications.length)return alert("No applications to export.");if(!window.XLSX)return alert("Excel export library did not load. Use CSV export instead.");
+ const sheet=XLSX.utils.json_to_sheet(exportRows()),book=XLSX.utils.book_new();XLSX.utils.book_append_sheet(book,sheet,"Applications");XLSX.writeFile(book,"nexwith-applications-"+new Date().toISOString().slice(0,10)+".xlsx");
+});
 ["#search-input","#status-filter","#role-filter","#sort-filter"].forEach(s=>$(s).addEventListener("input",render));
 $("#google-login").addEventListener("click",async()=>{
- const button=$("#google-login");
- try{
-  $("#login-error").textContent="";
-  button.disabled=true;
-  button.textContent="Opening Google sign-in…";
-  await signInWithPopup(auth,provider);
- }catch(e){
-  console.error(e);
-  const messages={
-   "auth/unauthorized-domain":"Add nexwith.vercel.app to Firebase Authentication → Settings → Authorized domains.",
-   "auth/popup-closed-by-user":"The sign-in window was closed before completion. Try again.",
-   "auth/popup-blocked":"Your browser blocked the sign-in window. Allow pop-ups for this site and try again.",
-   "auth/network-request-failed":"Network connection failed. Check your connection and retry."
-  };
-  $("#login-error").textContent=messages[e.code]||e.message||"Google sign-in failed. Please try again.";
- }finally{
-  button.disabled=false;
-  button.innerHTML='Continue with Google <span>↗</span>';
+ const button=$("#google-login");button.disabled=true;button.textContent="Opening Google sign-in…";$("#login-error").textContent="";
+ try{await signInWithPopup(auth,provider);}
+ catch(e){
+  console.error("Nexwith admin Google sign-in:",e);
+  const messages={"auth/unauthorized-domain":"Add nexwith.vercel.app to Firebase Authentication → Settings → Authorized domains.","auth/popup-blocked":"Your browser blocked the Google sign-in popup. Allow pop-ups for nexwith.vercel.app and retry.","auth/popup-closed-by-user":"The Google sign-in window was closed before authentication completed.","auth/operation-not-allowed":"Google sign-in is disabled. Enable the Google provider in Firebase Authentication.","auth/network-request-failed":"Network request failed. Check your connection and retry."};
+  $("#login-error").textContent=messages[e.code]||("Google sign-in failed ("+(e.code||"unknown")+"). "+(e.message||"Please retry."));
+ }finally{button.disabled=false;button.innerHTML='Continue with Google <span>↗</span>';}
+});
+function startRealtime(){
+ if(unsubscribe)unsubscribe();
+ unsubscribe=onSnapshot(collection(db,"applications"),snap=>{applications=snap.docs.map(d=>({id:d.id,...d.data()}));$("#sync-state").textContent="● Live · synced";render();},e=>{console.error("Firestore listener:",e);$("#sync-state").textContent="Connection error";$("#applications-body").innerHTML='<tr><td colspan="6" class="empty-cell">Could not read applications. Check Firestore rules and administrator access.</td></tr>';});
+}
+$("#signout-top").addEventListener("click",()=>signOut(auth));
+onAuthStateChanged(auth,user=>{
+ if(user&&ADMIN_EMAILS.includes((user.email||"").toLowerCase())){showWorkspace();startRealtime();}
+ else{
+  if(unsubscribe){unsubscribe();unsubscribe=null;}
+  if(user)signOut(auth).catch(console.error);
+  $("#signout-top").hidden=true;$("#sync-state").textContent="Signed out";
+  showLogin(user?"This Google account is not authorized for Nexwith administration.":"");
  }
 });
-function startRealtime(){if(unsubscribe)unsubscribe();unsubscribe=onSnapshot(collection(db,"applications"),snap=>{applications=snap.docs.map(d=>({id:d.id,...d.data()}));$("#sync-state").textContent="● Live · synced";render();},e=>{console.error(e);$("#sync-state").textContent="Connection error";$("#applications-body").innerHTML='<tr><td colspan="6" class="empty-cell">Could not read applications. Check Firestore rules and indexes.</td></tr>';});}
-function setAuthViews(isSignedIn){
- loginView.hidden=isSignedIn;
- dashboard.hidden=!isSignedIn;
- loginView.classList.toggle("view-hidden",isSignedIn);
- dashboard.classList.toggle("view-hidden",!isSignedIn);
- loginView.style.display=isSignedIn?"none":"";
- dashboard.style.display=isSignedIn?"":"none";
-}
-function showSignedIn(user){
- if(!ADMIN_EMAILS.includes((user.email||"").toLowerCase())){
-  setAuthViews(false);
-  $("#signout-top").hidden=true;
-  $("#login-error").textContent="This Google account is not authorized for Nexwith administration.";
-  signOut(auth);
-  return;
- }
- $("#login-error").textContent="";
- setAuthViews(true);
- $("#signout-top").hidden=false;
- startRealtime();
-}
-onAuthStateChanged(auth,user=>{if(user)showSignedIn(user);else{if(unsubscribe){unsubscribe();unsubscribe=null;}setAuthViews(false);$("#signout-top").hidden=true;$("#sync-state").textContent="Signed out";}});
-$("#signout-top").addEventListener("click",()=>signOut(auth));
